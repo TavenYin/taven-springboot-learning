@@ -23,3 +23,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+/spring-cloud-eureka/eureka-server/target
+/spring-cloud-eureka/service-hi/target
