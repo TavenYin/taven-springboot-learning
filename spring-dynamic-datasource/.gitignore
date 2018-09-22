@@ -1,4 +1,4 @@
-/spring-async-demo/target/
+/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -23,7 +23,3 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/spring-cloud-eureka/eureka-server/target
-/spring-cloud-eureka/service-hi/target
-/spring-dynamic-datasource/target
-/spring-cloud-eureka/service-ribbon/target
