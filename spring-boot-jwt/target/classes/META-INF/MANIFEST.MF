@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: spring-boot-jwt
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Taven
+Implementation-Vendor-Id: com.gitee.taven
+Build-Jdk: 1.8.0_111
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/spring-boot-jwt
+Created-By: Maven Integration for Eclipse
+
