@@ -60,8 +60,12 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 			pw.close();
 			return false;
 		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			PrintWriter pw = response.getWriter();
+			pw.write(e.getMessage());
+			pw.close();
 			return false;
 		} 
 		
