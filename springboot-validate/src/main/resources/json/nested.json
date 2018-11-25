@@ -1,0 +1,16 @@
+{
+  "userId": "555443",
+  "username": "Taven",
+  "password": "",
+  "cardList": [{
+    "cardId": "9",
+    "cardNum": "1234567890",
+    "createDate": "2018-11-23",
+    "cardType": "3"
+  }, {
+    "cardId": "  2 ",
+    "cardNum": "1234567890",
+    "createDate": "2018-11-23",
+    "cardType": "2"
+  }]
+}
