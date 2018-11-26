@@ -1,10 +1,11 @@
 package com.gitee.taven.controller;
 
 import com.gitee.taven.dto.CardDTO;
+import com.gitee.taven.dto.CustomDTO;
 import com.gitee.taven.dto.GroupCardDTO;
 import com.gitee.taven.dto.UserDTO;
-import com.gitee.taven.validate.Insert;
-import com.gitee.taven.validate.Update;
+import com.gitee.taven.validate.group.Insert;
+import com.gitee.taven.validate.group.Update;
 import com.gitee.taven.validate.ValidList;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,9 +42,9 @@ public class UserController {
         return card;
     }
 
-    @PostMapping("update_card")
-    public Object update_card(@RequestBody @Validated(Update.class) GroupCardDTO card){
-        return card;
+    @PostMapping("custom")
+    public Object custom(@RequestBody @Validated CustomDTO customDTO){
+        return customDTO;
     }
 
 }

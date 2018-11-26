@@ -1,5 +1,7 @@
 package com.gitee.taven.dto;
 
+import com.gitee.taven.validate.annotation.CaseMode;
+import com.gitee.taven.validate.annotation.CheckCase;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;

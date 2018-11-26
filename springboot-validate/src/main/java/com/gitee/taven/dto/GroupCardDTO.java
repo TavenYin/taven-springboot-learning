@@ -1,7 +1,7 @@
 package com.gitee.taven.dto;
 
-import com.gitee.taven.validate.Insert;
-import com.gitee.taven.validate.Update;
+import com.gitee.taven.validate.group.Insert;
+import com.gitee.taven.validate.group.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
