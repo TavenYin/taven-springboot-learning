@@ -1,6 +1,12 @@
-package com.gitee.taven.domain;
+package com.gitee.taven.domain.entity;
 
-public class User {
+import org.apache.shiro.authc.UsernamePasswordToken;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 3699029565499247948L;
 
     private Integer id;
 
@@ -31,4 +37,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }
