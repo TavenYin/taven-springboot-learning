@@ -23,7 +23,8 @@ public class ShiroController {
     @GetMapping("login.html")
     public String login() {
         // 如果用户已经登录了 则去首页
-        if (SecurityUtils.getSubject().isAuthenticated()) {
+        Subject subject =SecurityUtils.getSubject();
+        if (subject.isAuthenticated() || subject.isRemembered()) {
             return "redirect:index.html";
         }
         return "login";
