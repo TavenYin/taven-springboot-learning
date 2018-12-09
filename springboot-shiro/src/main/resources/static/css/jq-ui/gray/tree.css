@@ -1,0 +1,51 @@
+/* 超链接 */
+.st_tree a {
+	color: #222;
+	text-decoration: none;
+}
+/* 鼠标经过的超链接 */
+.st_tree a:hover {
+	color: #f33;
+	text-decoration: underline;
+}
+/* 菜单 */
+.st_tree ul {
+	padding: 0 0 0 18px;
+	margin: 0;
+}
+/* 菜单项 */
+.st_tree ul li {
+	font-size: 13px;
+	color: #222;
+	line-height: 20px;
+	list-style: none;
+	padding: 2px 0 2px 0;
+	white-space: nowrap;
+}
+/* 子菜单的父节点 */
+.st_tree .folder {
+	list-style-image: url(../icon/st_icon.png);
+	padding: 0 0 0 0;
+}
+/* 展开的父节点 */
+.st_tree .open{
+	list-style-image: url(../icon/st_icon_open.png);
+	padding: 0 0 0 0;
+}
+
+.st_tree .node a span, .st_tree .folder a span {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 3px;
+	width: 16px;
+	height: 16px;
+}
+.st_tree .node > a span {
+	background-image: url('../icon/st_node.gif');
+}
+.st_tree .folder > a span {
+	background-image: url('../icon/st_folder.gif');
+}
+.st_tree .open > a span {
+	background-image: url('../icon/st_folder_open.gif');
+}

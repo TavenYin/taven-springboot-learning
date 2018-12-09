@@ -6,4 +6,12 @@
 		select * from sys_user where `username` = #{username}
 	</select>
 
+	<resultMap id="userRolePermission" type="com.gitee.taven.domain.dto.AuthorizationDTO">
+
+	</resultMap>
+
+	<select id="getUserRolePermission" resultMap="userRolePermission">
+
+	</select>
+
 </mapper>

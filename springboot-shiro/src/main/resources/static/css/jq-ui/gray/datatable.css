@@ -1,0 +1,20 @@
+.datatable-wrapper {
+	width: 100%;
+}
+.datatable {
+	width: 100%;
+	font-size: 12px;
+}
+.datatable td, .datatable th {
+	padding: 5px 10px;
+	text-align: left;
+	border-bottom: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+}
+.datatable th {
+	border-top: 1px solid #dddddd;
+	background: #f6f6f6;
+}
+.datatable tr td:last-child, .datatable tr th:last-child {
+	border-right: 1px solid #dddddd;
+}

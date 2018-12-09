@@ -1,0 +1,41 @@
+.pagination {
+	width: 100%;
+}
+.pagination a {
+	display: inline-block;
+	margin: 0 3px;
+	padding: 0 8px;
+	height: 20px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 12px;
+	color: #000000;
+	line-height: 20px;
+	background: #f6f6f6;
+	border: 1px solid #dddddd;
+}
+.pagination a:first-child {
+	margin-left: 0px;
+}
+.pagination a:last-child {
+	margin-right: 0px;
+}
+.page-container {
+	display: inline-block;
+}
+.pagination a.current-page {
+	background: #ff6666;
+	border: 1px solid #ff6666;
+	cursor: default;
+}
+.pagination a:HOVER {
+	background: #ff6666;
+	border: 1px solid #ff6666;
+	cursor: pointer;
+}
+.pagination a.disable-page {
+	color: #dddddd;
+	background: #ffffff;
+	border: 1px solid #dddddd;
+	cursor: default;
+}

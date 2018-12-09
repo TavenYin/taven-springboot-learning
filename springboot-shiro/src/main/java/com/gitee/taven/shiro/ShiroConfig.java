@@ -3,7 +3,6 @@ package com.gitee.taven.shiro;
 import com.gitee.taven.controller.ShiroController;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -13,7 +12,6 @@ import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +46,7 @@ public class ShiroConfig {
 
     @Bean
     public Realm realm() {
-        CustomRealm realm = new CustomRealm();
+        UserRealm realm = new UserRealm();
         realm.setCredentialsMatcher(credentialsMatcher());
         realm.setCacheManager(ehCacheManager());
         return realm;
@@ -63,7 +61,7 @@ public class ShiroConfig {
 
     @Bean
     public CredentialsMatcher credentialsMatcher() {
-        CustomMatcher credentialsMatcher = new CustomMatcher(ehCacheManager());
+        PasswordMatcher credentialsMatcher = new PasswordMatcher(ehCacheManager());
         credentialsMatcher.setHashAlgorithmName("MD5");
         credentialsMatcher.setHashIterations(1024);
         credentialsMatcher.setStoredCredentialsHexEncoded(true);

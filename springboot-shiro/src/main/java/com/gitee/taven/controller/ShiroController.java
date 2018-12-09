@@ -1,8 +1,8 @@
 package com.gitee.taven.controller;
 
-import com.gitee.taven.domain.dto.UserDTO;
+import com.gitee.taven.domain.bean.UserBean;
+import com.gitee.taven.domain.dto.AjaxResult;
 import com.gitee.taven.domain.entity.User;
-import com.gitee.taven.domain.vo.AjaxResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -22,7 +22,7 @@ public class ShiroController {
 
     @GetMapping("login.html")
     public String login() {
-        // 如果用户已经登录了 则去首页
+        // 如果用户 "已经登录" 或者 "记住我状态" 则去首页
         Subject subject =SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
             return "redirect:index.html";
@@ -32,7 +32,7 @@ public class ShiroController {
 
     @PostMapping("login")
     @ResponseBody
-    public AjaxResult login(@RequestBody @Valid UserDTO user) {
+    public AjaxResult login(@RequestBody @Valid UserBean user) {
         Subject subject = SecurityUtils.getSubject();
         try {
             if (!subject.isAuthenticated()) {
@@ -62,12 +62,18 @@ public class ShiroController {
         return AjaxResult.successResponse("登陆成功");
     }
 
+    @GetMapping("logout")
+    public String  logout() {
+        SecurityUtils.getSubject().logout();
+        return "redirect:login.html";
+    }
+
     @GetMapping("index.html")
     public ModelAndView getPrincipal(ModelAndView mv) {
         Subject subject = SecurityUtils.getSubject();
-        Object principal =  subject.getPrincipal();
+        User principal = (User) subject.getPrincipal();
         mv.setViewName("index");
-        mv.addObject("principal", principal);
+        mv.addObject("principal", principal.getUsername());
         return mv;
     }
 

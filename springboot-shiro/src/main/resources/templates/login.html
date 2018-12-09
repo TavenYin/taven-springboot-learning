@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
     <form id="form">
@@ -13,7 +13,6 @@
         rememberMe <input id="rememberMe" type="checkbox" name="rememberMe" value="false">
         <button id="login" type="button">登录</button>
     </form>
-    <script src="/js/jquery-3.3.1.min.js"></script>
     <script>
         $.fn.serializeObject = function() {
             var o = {};

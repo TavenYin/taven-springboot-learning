@@ -1,0 +1,32 @@
+/* 手风琴样式 */
+.accordion {
+	margin: 5px;
+	font-size: 14px;
+}
+/* 链接样式 */
+.accordion a {
+	color: #333333;
+	text-decoration: none;
+}
+.accordion a:hover {
+	color: #c81623;
+}
+/* 菜单标题样式 */
+.accordion .accordion-title {
+	margin: 5px 0;
+	padding: 5px;
+	height: 25px;
+	line-height: 25px;
+	background: #f6f6f6;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.accordion .accordion-title:hover {
+	font-weight: bold;
+	background: #dddddd;
+}
+/* 菜单面板样式 */
+.accordion .accordion-body {
+	padding-left: 10px;
+	background: white;
+}
