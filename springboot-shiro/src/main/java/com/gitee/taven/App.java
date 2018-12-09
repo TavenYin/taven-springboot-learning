@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.gitee.taven.mapper")
+@MapperScan("com.gitee.taven.sys.mapper")
 public class App {
 
 	public static void main(String[] args) {

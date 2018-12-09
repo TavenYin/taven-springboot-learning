@@ -1,6 +1,6 @@
-package com.gitee.taven.shiro;
+package com.gitee.taven.auth.shiro;
 
-import com.gitee.taven.controller.ShiroController;
+import com.gitee.taven.auth.controller.AuthController;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShiroConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(ShiroController.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
@@ -33,11 +33,11 @@ public class ShiroConfig {
         chainDefinition.addPathDefinition("/css/**", "anon");
         chainDefinition.addPathDefinition("/img/**", "anon");
         chainDefinition.addPathDefinition("/login", "anon");
-        // 用户必须包含'admin'角色
+        // 用户为授权通过或者RememberMe && 包含'admin'角色
         chainDefinition.addPathDefinition("/admin/**", "user, roles[admin]");
-        // 用户必须包含'document:read'权限
+        // 用户为授权通过或者RememberMe && 包含'document:read'权限
         chainDefinition.addPathDefinition("/docs/**", "user, perms[document:read]");
-        // 用户访问所有请求 必须授权
+        // 用户访问所有请求 授权通过或者RememberMe
         chainDefinition.addPathDefinition("/**", "user");
 
 //        chainDefinition.addPathDefinition("/**", "anon");
@@ -46,7 +46,7 @@ public class ShiroConfig {
 
     @Bean
     public Realm realm() {
-        UserRealm realm = new UserRealm();
+        AuthRealm realm = new AuthRealm();
         realm.setCredentialsMatcher(credentialsMatcher());
         realm.setCacheManager(ehCacheManager());
         return realm;
@@ -61,23 +61,22 @@ public class ShiroConfig {
 
     @Bean
     public CredentialsMatcher credentialsMatcher() {
-        PasswordMatcher credentialsMatcher = new PasswordMatcher(ehCacheManager());
+        AuthCredentialsMatcher credentialsMatcher = new AuthCredentialsMatcher(ehCacheManager());
         credentialsMatcher.setHashAlgorithmName("MD5");
         credentialsMatcher.setHashIterations(1024);
         credentialsMatcher.setStoredCredentialsHexEncoded(true);
         return credentialsMatcher;
     }
 
-    public SessionsSecurityManager securityManager() {
-        log.debug("--------------shiro已经加载----------------");
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        // 自定义缓存实现 使用redis
-        manager.setCacheManager(ehCacheManager());
-        manager.setRealm(realm());
-        manager.setRememberMeManager(rememberMeManager());
-        return manager;
-    }
-
+//    public SessionsSecurityManager securityManager() {
+//        log.debug("--------------shiro已经加载----------------");
+//        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+//        manager.setCacheManager(ehCacheManager());
+//        manager.setRealm(realm());
+//        manager.setRememberMeManager(rememberMeManager());
+//        return manager;
+//    }
+//
     @Bean
     public RememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
@@ -90,7 +89,7 @@ public class ShiroConfig {
     @Bean
     public SimpleCookie rememberMeCookie(){
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe7777");
         //<!-- 记住我cookie生效时间30天 ,单位秒;-->
         simpleCookie.setMaxAge(259200);
         return simpleCookie;

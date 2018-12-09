@@ -1,4 +1,4 @@
-package com.gitee.taven.controller;
+package com.gitee.taven.sys.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +9,7 @@ public class UserController {
 
     @RequestMapping("index.html")
     public String index() {
-        return "user/index";
+        return "sys/user/index";
     }
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gitee.taven.mapper.UserMapper">
+<mapper namespace="com.gitee.taven.sys.mapper.UserRelationMapper">
 
-	<select id="getUserByUsername" resultType="com.gitee.taven.domain.entity.User">
+	<select id="getUserByUsername" resultType="com.gitee.taven.sys.domain.entity.User">
 		select * from sys_user where `username` = #{username}
 	</select>
 
-	<resultMap id="userRolePermission" type="com.gitee.taven.domain.dto.AuthorizationDTO">
+	<resultMap id="userRolePermission" type="com.gitee.taven.sys.domain.dto.AuthorizationDTO">
 
 	</resultMap>
 

@@ -1,6 +1,4 @@
-package com.gitee.taven.domain.entity;
-
-import org.apache.shiro.authc.UsernamePasswordToken;
+package com.gitee.taven.sys.domain.entity;
 
 import java.io.Serializable;
 

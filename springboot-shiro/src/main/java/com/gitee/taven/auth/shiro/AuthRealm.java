@@ -1,7 +1,7 @@
-package com.gitee.taven.shiro;
+package com.gitee.taven.auth.shiro;
 
-import com.gitee.taven.domain.entity.User;
-import com.gitee.taven.service.UserService;
+import com.gitee.taven.auth.service.AuthService;
+import com.gitee.taven.sys.domain.entity.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -10,10 +10,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserRealm extends AuthorizingRealm {
+public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     /**
      * 认证
@@ -25,7 +25,7 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String username = (String) authenticationToken.getPrincipal();
-        User u = userService.getUserByUsername(username);
+        User u = authService.getUserByUsername(username);
 
         if (u == null) {
             throw new UnknownAccountException();
@@ -47,7 +47,7 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addRole("admin");
+//        info.addRole("admin");
         return info;
     }
 

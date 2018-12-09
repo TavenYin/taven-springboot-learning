@@ -1,8 +1,8 @@
-package com.gitee.taven.controller;
+package com.gitee.taven.auth.controller;
 
-import com.gitee.taven.domain.bean.UserBean;
-import com.gitee.taven.domain.dto.AjaxResult;
-import com.gitee.taven.domain.entity.User;
+import com.gitee.taven.sys.domain.bean.UserBean;
+import com.gitee.taven.sys.domain.dto.AjaxResult;
+import com.gitee.taven.sys.domain.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -16,9 +16,9 @@ import javax.validation.Valid;
 
 
 @Controller
-public class ShiroController {
+public class AuthController {
 
-    private static final Logger log = LoggerFactory.getLogger(ShiroController.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("login.html")
     public String login() {
