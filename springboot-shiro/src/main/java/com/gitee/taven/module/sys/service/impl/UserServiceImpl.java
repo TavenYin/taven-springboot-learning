@@ -1,6 +1,6 @@
-package com.gitee.taven.sys.service.impl;
+package com.gitee.taven.module.sys.service.impl;
 
-import com.gitee.taven.sys.service.UserService;
+import com.gitee.taven.module.sys.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

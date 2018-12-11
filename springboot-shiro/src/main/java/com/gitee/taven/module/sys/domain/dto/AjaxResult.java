@@ -1,4 +1,4 @@
-package com.gitee.taven.sys.domain.dto;
+package com.gitee.taven.module.sys.domain.dto;
 
 import java.io.Serializable;
 

@@ -1,8 +1,8 @@
-package com.gitee.taven.auth.controller;
+package com.gitee.taven.module.auth.controller;
 
-import com.gitee.taven.sys.domain.bean.UserBean;
-import com.gitee.taven.sys.domain.dto.AjaxResult;
-import com.gitee.taven.sys.domain.entity.User;
+import com.gitee.taven.module.auth.sys.domain.bean.UserBean;
+import com.gitee.taven.module.sys.domain.dto.AjaxResult;
+import com.gitee.taven.module.sys.domain.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;

@@ -1,7 +1,7 @@
-package com.gitee.taven.auth.shiro;
+package com.gitee.taven.core.shiro;
 
-import com.gitee.taven.auth.service.AuthService;
-import com.gitee.taven.sys.domain.entity.User;
+import com.gitee.taven.module.auth.service.AuthService;
+import com.gitee.taven.module.sys.domain.entity.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -9,10 +9,12 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
+    @Lazy
     private AuthService authService;
 
     /**

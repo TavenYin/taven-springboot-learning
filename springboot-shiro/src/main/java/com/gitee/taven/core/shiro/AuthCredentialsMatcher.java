@@ -1,4 +1,4 @@
-package com.gitee.taven.auth.shiro;
+package com.gitee.taven.core.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

@@ -1,7 +1,7 @@
-package com.gitee.taven.sys.mapper;
+package com.gitee.taven.module.sys.mapper;
 
-import com.gitee.taven.sys.domain.dto.AuthorizationDTO;
-import com.gitee.taven.sys.domain.entity.User;
+import com.gitee.taven.module.sys.domain.dto.AuthorizationDTO;
+import com.gitee.taven.module.sys.domain.entity.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

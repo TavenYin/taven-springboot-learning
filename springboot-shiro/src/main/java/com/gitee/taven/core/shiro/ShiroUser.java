@@ -1,4 +1,4 @@
-package com.gitee.taven.auth.shiro;
+package com.gitee.taven.core.shiro;
 
 import java.io.Serializable;
 import java.util.List;

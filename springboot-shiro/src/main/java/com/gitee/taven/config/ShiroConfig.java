@@ -1,13 +1,17 @@
-package com.gitee.taven.auth.shiro;
+package com.gitee.taven.config;
 
-import com.gitee.taven.auth.controller.AuthController;
+import com.gitee.taven.core.shiro.AuthCredentialsMatcher;
+import com.gitee.taven.core.shiro.AuthRealm;
+import com.gitee.taven.module.auth.controller.AuthController;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
@@ -18,6 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 @Configuration
 public class ShiroConfig {
@@ -25,23 +32,28 @@ public class ShiroConfig {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @Bean
-    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
+        shiroFilter.setSecurityManager(securityManager);
 
+        Map<String, String> chainDefinition = new LinkedHashMap<>();
         // 静态资源与登录请求不拦截
-        chainDefinition.addPathDefinition("/js/**", "anon");
-        chainDefinition.addPathDefinition("/css/**", "anon");
-        chainDefinition.addPathDefinition("/img/**", "anon");
-        chainDefinition.addPathDefinition("/login", "anon");
+        chainDefinition.put("/js/**", "anon");
+        chainDefinition.put("/css/**", "anon");
+        chainDefinition.put("/img/**", "anon");
+        chainDefinition.put("/login", "anon");
         // 用户为授权通过或者RememberMe && 包含'admin'角色
-        chainDefinition.addPathDefinition("/admin/**", "user, roles[admin]");
+        chainDefinition.put("/admin/**", "user, roles[admin]");
         // 用户为授权通过或者RememberMe && 包含'document:read'权限
-        chainDefinition.addPathDefinition("/docs/**", "user, perms[document:read]");
+        chainDefinition.put("/docs/**", "user, perms[document:read]");
         // 用户访问所有请求 授权通过或者RememberMe
-        chainDefinition.addPathDefinition("/**", "user");
+        chainDefinition.put("/**", "user");
 
 //        chainDefinition.addPathDefinition("/**", "anon");
-        return chainDefinition;
+        shiroFilter.setFilterChainDefinitionMap(chainDefinition);
+        shiroFilter.setLoginUrl("/login.html");
+        shiroFilter.setSuccessUrl("/index.html");
+        return shiroFilter;
     }
 
     @Bean
@@ -68,15 +80,16 @@ public class ShiroConfig {
         return credentialsMatcher;
     }
 
-//    public SessionsSecurityManager securityManager() {
-//        log.debug("--------------shiro已经加载----------------");
-//        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-//        manager.setCacheManager(ehCacheManager());
-//        manager.setRealm(realm());
-//        manager.setRememberMeManager(rememberMeManager());
-//        return manager;
-//    }
-//
+    @Bean
+    public DefaultWebSecurityManager securityManager() {
+        log.debug("--------------shiro已经加载----------------");
+        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+        manager.setCacheManager(ehCacheManager());
+        manager.setRealm(realm());
+        manager.setRememberMeManager(rememberMeManager());
+        return manager;
+    }
+
     @Bean
     public RememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
@@ -89,10 +102,31 @@ public class ShiroConfig {
     @Bean
     public SimpleCookie rememberMeCookie(){
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe7777");
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
         //<!-- 记住我cookie生效时间30天 ,单位秒;-->
         simpleCookie.setMaxAge(259200);
         return simpleCookie;
+    }
+
+    /**
+     * Shiro生命周期处理器:
+     * 用于在实现了Initializable接口的Shiro bean初始化时调用Initializable接口回调(例如:UserRealm)
+     * 在实现了Destroyable接口的Shiro bean销毁时调用 Destroyable接口回调(例如:DefaultSecurityManager)
+     */
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    /**
+     * 启用shrio授权注解拦截方式，AOP式方法级权限检查
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor =
+                new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 
 }

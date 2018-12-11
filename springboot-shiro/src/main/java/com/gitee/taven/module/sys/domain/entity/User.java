@@ -1,4 +1,4 @@
-package com.gitee.taven.sys.domain.entity;
+package com.gitee.taven.module.sys.domain.entity;
 
 import java.io.Serializable;
 
