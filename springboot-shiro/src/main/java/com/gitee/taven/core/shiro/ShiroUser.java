@@ -3,6 +3,9 @@ package com.gitee.taven.core.shiro;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 用于 subject principal
+ */
 public class ShiroUser implements Serializable {
 
     private static final long serialVersionUID = 7131512093033017873L;
@@ -11,16 +14,14 @@ public class ShiroUser implements Serializable {
 
     private String username;
 
-    private List<String> roles;
-
-    private List<String> permissions;
+    private String userType;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getUsername() {
@@ -28,22 +29,14 @@ public class ShiroUser implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    public List<String> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
+    public void setUserType(String userType) {
+        this.userType = userType == null ? null : userType.trim();
     }
 }

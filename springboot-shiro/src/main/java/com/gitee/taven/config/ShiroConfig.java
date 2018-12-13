@@ -41,15 +41,15 @@ public class ShiroConfig {
         chainDefinition.put("/js/**", "anon");
         chainDefinition.put("/css/**", "anon");
         chainDefinition.put("/img/**", "anon");
+        chainDefinition.put("/layui/**", "anon");
         chainDefinition.put("/login", "anon");
         // 用户为授权通过或者RememberMe && 包含'admin'角色
         chainDefinition.put("/admin/**", "user, roles[admin]");
         // 用户为授权通过或者RememberMe && 包含'document:read'权限
         chainDefinition.put("/docs/**", "user, perms[document:read]");
-        // 用户访问所有请求 授权通过或者RememberMe
+        // 用户访问所有请求 授权通过 || RememberMe
         chainDefinition.put("/**", "user");
 
-//        chainDefinition.addPathDefinition("/**", "anon");
         shiroFilter.setFilterChainDefinitionMap(chainDefinition);
         shiroFilter.setLoginUrl("/login.html");
         shiroFilter.setSuccessUrl("/index.html");

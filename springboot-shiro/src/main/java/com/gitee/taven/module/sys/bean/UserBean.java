@@ -1,4 +1,4 @@
-package com.gitee.taven.module.auth.sys.domain.bean;
+package com.gitee.taven.module.sys.bean;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 

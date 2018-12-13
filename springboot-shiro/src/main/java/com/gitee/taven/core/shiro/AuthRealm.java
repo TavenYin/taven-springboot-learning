@@ -1,7 +1,7 @@
 package com.gitee.taven.core.shiro;
 
 import com.gitee.taven.module.auth.service.AuthService;
-import com.gitee.taven.module.sys.domain.entity.User;
+import com.gitee.taven.module.sys.entity.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
