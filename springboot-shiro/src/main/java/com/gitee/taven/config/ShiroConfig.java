@@ -1,8 +1,9 @@
 package com.gitee.taven.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.gitee.taven.core.shiro.AuthCredentialsMatcher;
 import com.gitee.taven.core.shiro.AuthRealm;
-import com.gitee.taven.module.auth.controller.AuthController;
+import com.gitee.taven.module.sys.controller.AuthController;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -12,8 +13,6 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
-import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -43,8 +42,9 @@ public class ShiroConfig {
         chainDefinition.put("/img/**", "anon");
         chainDefinition.put("/layui/**", "anon");
         chainDefinition.put("/login", "anon");
+        chainDefinition.put("/login.html", "anon");
         // 用户为授权通过或者RememberMe && 包含'admin'角色
-        chainDefinition.put("/admin/**", "user, roles[admin]");
+        chainDefinition.put("/admin/**", "authc, roles[super_admin]");
         // 用户为授权通过或者RememberMe && 包含'document:read'权限
         chainDefinition.put("/docs/**", "user, perms[document:read]");
         // 用户访问所有请求 授权通过 || RememberMe
@@ -74,8 +74,8 @@ public class ShiroConfig {
     @Bean
     public CredentialsMatcher credentialsMatcher() {
         AuthCredentialsMatcher credentialsMatcher = new AuthCredentialsMatcher(ehCacheManager());
-        credentialsMatcher.setHashAlgorithmName("MD5");
-        credentialsMatcher.setHashIterations(1024);
+        credentialsMatcher.setHashAlgorithmName(AuthCredentialsMatcher.HASH_ALGORITHM_NAME);
+        credentialsMatcher.setHashIterations(AuthCredentialsMatcher.HASH_ITERATIONS);
         credentialsMatcher.setStoredCredentialsHexEncoded(true);
         return credentialsMatcher;
     }
@@ -127,6 +127,11 @@ public class ShiroConfig {
                 new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 
 }

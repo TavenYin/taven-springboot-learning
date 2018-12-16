@@ -1,10 +1,17 @@
 package com.gitee.taven.module.sys.service;
 
-import com.gitee.taven.module.sys.entity.UserDO;
-import com.gitee.taven.module.sys.entity.UserDOExample;
+
+import com.gitee.taven.module.sys.dto.AuthorizationDTO;
+import com.gitee.taven.module.sys.entity.User;
+import com.gitee.taven.module.sys.entity.UserExample;
+
 
 public interface UserService {
 
-    UserDO selectOneByExample(UserDOExample example);
+    User selectOneByExample(UserExample example);
+
+    User getUserByUsername(String username);
+
+    AuthorizationDTO getRolesAndPermissions(String userId);
 
 }

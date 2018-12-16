@@ -2,18 +2,14 @@ package com.gitee.taven.module.sys.entity;
 
 import java.util.Date;
 
-public class UserDO {
+public class UserRoleRef {
     private String id;
 
-    private String username;
+    private String userId;
 
-    private String password;
+    private String roleId;
 
-    private String userType;
-
-    private Byte isLock;
-
-    private Byte isDelete;
+    private String isDelete;
 
     private Date createTime;
 
@@ -31,44 +27,28 @@ public class UserDO {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
-    public String getPassword() {
-        return password;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType == null ? null : userType.trim();
-    }
-
-    public Byte getIsLock() {
-        return isLock;
-    }
-
-    public void setIsLock(Byte isLock) {
-        this.isLock = isLock;
-    }
-
-    public Byte getIsDelete() {
+    public String getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete == null ? null : isDelete.trim();
     }
 
     public Date getCreateTime() {

@@ -2,14 +2,14 @@ package com.gitee.taven.module.sys.entity;
 
 import java.util.Date;
 
-public class RolePermissionRefDO {
+public class RolePermissionRef {
     private String id;
 
     private String roleId;
 
     private String permissionId;
 
-    private Byte isDelete;
+    private String isDelete;
 
     private Date createTime;
 
@@ -43,12 +43,12 @@ public class RolePermissionRefDO {
         this.permissionId = permissionId == null ? null : permissionId.trim();
     }
 
-    public Byte getIsDelete() {
+    public String getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete == null ? null : isDelete.trim();
     }
 
     public Date getCreateTime() {

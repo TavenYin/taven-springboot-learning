@@ -3,9 +3,6 @@ package com.gitee.taven.core.shiro;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 用于 subject principal
- */
 public class ShiroUser implements Serializable {
 
     private static final long serialVersionUID = 7131512093033017873L;

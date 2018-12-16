@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gitee.taven.module.sys.mapper.RoleDOMapper" >
-  <resultMap id="BaseResultMap" type="com.gitee.taven.module.sys.entity.RoleDO" >
+<mapper namespace="com.gitee.taven.module.sys.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.gitee.taven.module.sys.entity.User" >
     <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
-    <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
-    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="CHAR" />
+    <result column="is_lock" property="isLock" jdbcType="CHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user" property="createUser" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -70,16 +72,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, role_name, role_code, is_delete, create_time, create_user, modify_time, modifyUser
+    id, username, password, user_type, is_lock, is_delete, create_time, create_user, 
+    modify_time, modifyUser
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gitee.taven.module.sys.entity.RoleDOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gitee.taven.module.sys.entity.UserExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from sys_role
+    from sys_user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,38 +93,46 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from sys_role
+    from sys_user
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from sys_role
+    delete from sys_user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.gitee.taven.module.sys.entity.RoleDOExample" >
-    delete from sys_role
+  <delete id="deleteByExample" parameterType="com.gitee.taven.module.sys.entity.UserExample" >
+    delete from sys_user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.gitee.taven.module.sys.entity.RoleDO" >
-    insert into sys_role (id, role_name, role_code, 
-      is_delete, create_time, create_user, 
-      modify_time, modifyUser)
-    values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.gitee.taven.module.sys.entity.User" >
+    insert into sys_user (id, username, password, 
+      user_type, is_lock, is_delete, 
+      create_time, create_user, modify_time, 
+      modifyUser)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{userType,jdbcType=CHAR}, #{isLock,jdbcType=CHAR}, #{isDelete,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyuser,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.gitee.taven.module.sys.entity.RoleDO" >
-    insert into sys_role
+  <insert id="insertSelective" parameterType="com.gitee.taven.module.sys.entity.User" >
+    insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="roleName != null" >
-        role_name,
+      <if test="username != null" >
+        username,
       </if>
-      <if test="roleCode != null" >
-        role_code,
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="isLock != null" >
+        is_lock,
       </if>
       <if test="isDelete != null" >
         is_delete,
@@ -143,14 +154,20 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="roleName != null" >
-        #{roleName,jdbcType=VARCHAR},
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
       </if>
-      <if test="roleCode != null" >
-        #{roleCode,jdbcType=VARCHAR},
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=CHAR},
+      </if>
+      <if test="isLock != null" >
+        #{isLock,jdbcType=CHAR},
       </if>
       <if test="isDelete != null" >
-        #{isDelete,jdbcType=TINYINT},
+        #{isDelete,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -166,26 +183,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.gitee.taven.module.sys.entity.RoleDOExample" resultType="java.lang.Integer" >
-    select count(*) from sys_role
+  <select id="countByExample" parameterType="com.gitee.taven.module.sys.entity.UserExample" resultType="java.lang.Integer" >
+    select count(*) from sys_user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update sys_role
+    update sys_user
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.roleName != null" >
-        role_name = #{record.roleName,jdbcType=VARCHAR},
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
       </if>
-      <if test="record.roleCode != null" >
-        role_code = #{record.roleCode,jdbcType=VARCHAR},
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null" >
+        user_type = #{record.userType,jdbcType=CHAR},
+      </if>
+      <if test="record.isLock != null" >
+        is_lock = #{record.isLock,jdbcType=CHAR},
       </if>
       <if test="record.isDelete != null" >
-        is_delete = #{record.isDelete,jdbcType=TINYINT},
+        is_delete = #{record.isDelete,jdbcType=CHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -205,11 +228,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update sys_role
+    update sys_user
     set id = #{record.id,jdbcType=VARCHAR},
-      role_name = #{record.roleName,jdbcType=VARCHAR},
-      role_code = #{record.roleCode,jdbcType=VARCHAR},
-      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      username = #{record.username,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      user_type = #{record.userType,jdbcType=CHAR},
+      is_lock = #{record.isLock,jdbcType=CHAR},
+      is_delete = #{record.isDelete,jdbcType=CHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=VARCHAR},
       modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
@@ -218,17 +243,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gitee.taven.module.sys.entity.RoleDO" >
-    update sys_role
+  <update id="updateByPrimaryKeySelective" parameterType="com.gitee.taven.module.sys.entity.User" >
+    update sys_user
     <set >
-      <if test="roleName != null" >
-        role_name = #{roleName,jdbcType=VARCHAR},
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="roleCode != null" >
-        role_code = #{roleCode,jdbcType=VARCHAR},
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=CHAR},
+      </if>
+      <if test="isLock != null" >
+        is_lock = #{isLock,jdbcType=CHAR},
       </if>
       <if test="isDelete != null" >
-        is_delete = #{isDelete,jdbcType=TINYINT},
+        is_delete = #{isDelete,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -245,11 +276,13 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.gitee.taven.module.sys.entity.RoleDO" >
-    update sys_role
-    set role_name = #{roleName,jdbcType=VARCHAR},
-      role_code = #{roleCode,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=TINYINT},
+  <update id="updateByPrimaryKey" parameterType="com.gitee.taven.module.sys.entity.User" >
+    update sys_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=CHAR},
+      is_lock = #{isLock,jdbcType=CHAR},
+      is_delete = #{isDelete,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

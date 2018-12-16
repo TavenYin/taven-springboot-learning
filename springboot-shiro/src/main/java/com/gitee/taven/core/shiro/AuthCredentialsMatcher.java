@@ -13,6 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AuthCredentialsMatcher extends HashedCredentialsMatcher {
 
+    public static final String HASH_ALGORITHM_NAME = "MD5";
+
+    public static final int HASH_ITERATIONS = 1024;
+
     // 记录当前用户密码输入错误的次数
     // 使用AtomicInteger 确保获得线程安全的数值.如果使用负载均衡，需缓存在redis中
     private Cache<String, AtomicInteger> passwordRetryCache;
@@ -44,15 +48,35 @@ public class AuthCredentialsMatcher extends HashedCredentialsMatcher {
         return matches;
     }
 
+    public static final class MD5 {
+
+        /**
+         * MD5 加密
+         *
+         * @param username
+         * @param password
+         * @return
+         */
+        public static String encrypt(String username, String password) {
+            // HashedCredentialsMatcher 默认使用 username 作为salt
+            ByteSource salt = salt(username);
+            SimpleHash simpleHash = new SimpleHash(HASH_ALGORITHM_NAME, password, salt, HASH_ITERATIONS);
+            return simpleHash.toHex();
+        }
+
+        public static ByteSource salt(String s) {
+            return ByteSource.Util.bytes(s);
+        }
+
+    }
+
     public static void main(String[] args) {
         // shiro 密码加密方法, 默认会使用 token 中的 username 作为 salt
         // hashAlgorithmName 与 hashIterations 我们在配置 @Bean CredentialsMatcher 时可以设置 保持一致即可
-        String hashAlgorithmName = "MD5";
-        int hashIterations = 1024;
         String username = "taven";
         String password = "6666";
-        ByteSource salt = ByteSource.Util.bytes(username);// HashedCredentialsMatcher 默认使用 username 作为salt
-        Object obj = new SimpleHash(hashAlgorithmName, password, salt, hashIterations);
-        System.out.println(obj);
+        String encrypt = AuthCredentialsMatcher.MD5.encrypt(username, password);
+        System.out.println(encrypt);
     }
+
 }

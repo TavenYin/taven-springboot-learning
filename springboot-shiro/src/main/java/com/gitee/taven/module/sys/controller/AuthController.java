@@ -1,11 +1,13 @@
-package com.gitee.taven.module.auth.controller;
+package com.gitee.taven.module.sys.controller;
 
+import com.gitee.taven.core.shiro.AuthRealm;
+import com.gitee.taven.core.shiro.ShiroUser;
 import com.gitee.taven.module.sys.bean.UserBean;
 import com.gitee.taven.module.base.AjaxResult;
-import com.gitee.taven.module.sys.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,9 +24,9 @@ public class AuthController {
 
     @GetMapping("login.html")
     public String login() {
-        // 如果用户 "已经登录" 或者 "记住我状态" 则去首页
         Subject subject =SecurityUtils.getSubject();
-        if (subject.isAuthenticated() || subject.isRemembered()) {
+        // 如果用户 "已经授权" 跳转至首页
+        if (subject.isAuthenticated()) {
             return "redirect:index.html";
         }
         return "login";
@@ -71,10 +73,21 @@ public class AuthController {
     @GetMapping("index.html")
     public ModelAndView getPrincipal(ModelAndView mv) {
         Subject subject = SecurityUtils.getSubject();
-        User principal = (User) subject.getPrincipal();
+        ShiroUser principal = (ShiroUser) subject.getPrincipal();
         mv.setViewName("index");
         mv.addObject("principal", principal.getUsername());
         return mv;
+    }
+
+    @GetMapping("clear_shiro_cache")
+    @ResponseBody
+    public AjaxResult clearShiroCache() {
+        Subject subject = SecurityUtils.getSubject();
+        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
+        AuthRealm authRealm = (AuthRealm) securityManager.getRealms().iterator().next();
+        // shiro 默认用 Principals 作为缓存key
+        authRealm.getAuthorizationCache().remove(subject.getPrincipals());
+        return AjaxResult.successResponse("clear");
     }
 
     @GetMapping("admin/has_role")
@@ -82,6 +95,13 @@ public class AuthController {
     public Object hasRole(String role) {
         Subject subject = SecurityUtils.getSubject();
         return subject.hasRole(role) ? "yes" : "no";
+    }
+
+    @GetMapping("admin/has_p")
+    @ResponseBody
+    public Object hasPermission(String p) {
+        Subject subject = SecurityUtils.getSubject();
+        return subject.isPermitted(p) ? "yes" : "no";
     }
 
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gitee.taven.module.sys.mapper.UserRoleRefDOMapper" >
-  <resultMap id="BaseResultMap" type="com.gitee.taven.module.sys.entity.UserRoleRefDO" >
+<mapper namespace="com.gitee.taven.module.sys.mapper.UserRoleRefMapper" >
+  <resultMap id="BaseResultMap" type="com.gitee.taven.module.sys.entity.UserRoleRef" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="VARCHAR" />
-    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user" property="createUser" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List" >
     id, user_id, role_id, is_delete, create_time, create_user, modify_time, modifyUser
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefExample" >
     select
     <if test="distinct" >
       distinct
@@ -97,21 +97,21 @@
     delete from sys_user_role_ref
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDOExample" >
+  <delete id="deleteByExample" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefExample" >
     delete from sys_user_role_ref
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDO" >
+  <insert id="insert" parameterType="com.gitee.taven.module.sys.entity.UserRoleRef" >
     insert into sys_user_role_ref (id, user_id, role_id, 
       is_delete, create_time, create_user, 
       modify_time, modifyUser)
     values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDO" >
+  <insert id="insertSelective" parameterType="com.gitee.taven.module.sys.entity.UserRoleRef" >
     insert into sys_user_role_ref
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -150,7 +150,7 @@
         #{roleId,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null" >
-        #{isDelete,jdbcType=TINYINT},
+        #{isDelete,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -166,7 +166,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDOExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefExample" resultType="java.lang.Integer" >
     select count(*) from sys_user_role_ref
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -185,7 +185,7 @@
         role_id = #{record.roleId,jdbcType=VARCHAR},
       </if>
       <if test="record.isDelete != null" >
-        is_delete = #{record.isDelete,jdbcType=TINYINT},
+        is_delete = #{record.isDelete,jdbcType=CHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -209,7 +209,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       user_id = #{record.userId,jdbcType=VARCHAR},
       role_id = #{record.roleId,jdbcType=VARCHAR},
-      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      is_delete = #{record.isDelete,jdbcType=CHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=VARCHAR},
       modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
@@ -218,7 +218,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.gitee.taven.module.sys.entity.UserRoleRef" >
     update sys_user_role_ref
     <set >
       <if test="userId != null" >
@@ -228,7 +228,7 @@
         role_id = #{roleId,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null" >
-        is_delete = #{isDelete,jdbcType=TINYINT},
+        is_delete = #{isDelete,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -245,11 +245,11 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.gitee.taven.module.sys.entity.UserRoleRefDO" >
+  <update id="updateByPrimaryKey" parameterType="com.gitee.taven.module.sys.entity.UserRoleRef" >
     update sys_user_role_ref
     set user_id = #{userId,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=TINYINT},
+      is_delete = #{isDelete,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

@@ -282,7 +282,10 @@
 			success: function(data) {
 				// 填充数据到面板
 				$tab.find("#" + param["id"]).html(data);
-			}
+			},
+			error: function (data) {
+                $tab.find("#" + param["id"]).html(data.responseText);
+            }
 		});
 	}
 	
