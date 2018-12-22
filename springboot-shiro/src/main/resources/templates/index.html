@@ -12,8 +12,12 @@
     <div class="layui-header">
         <div class="layui-logo">后台管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
-        <!--<ul class="layui-nav layui-layout-left">-->
-            <!--<li class="layui-nav-item"><a href="">控制台</a></li>-->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item">
+                <a id="main" href="javascript:; "onclick="$('#tab1').tab('addRemoteTab', {'title': '主页', 'id': 'tab0', 'url': '/main.html', 'method': 'get'});">
+                    <i class="layui-icon layui-icon-home" style="font-size: 17px;"></i> 主页
+                </a>
+            </li>
             <!--<li class="layui-nav-item"><a href="">商品管理</a></li>-->
             <!--<li class="layui-nav-item"><a href="">用户</a></li>-->
             <!--<li class="layui-nav-item">-->
@@ -24,7 +28,7 @@
                     <!--<dd><a href="">授权管理</a></dd>-->
                 <!--</dl>-->
             <!--</li>-->
-        <!--</ul>-->
+        </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
@@ -92,6 +96,7 @@
 
     $(function() {
         $("#tab1").tab();
+        $("#main").click();
     });
 </script>
 </body>

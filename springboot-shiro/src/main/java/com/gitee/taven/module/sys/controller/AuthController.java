@@ -70,6 +70,11 @@ public class AuthController {
         return "redirect:login.html";
     }
 
+    @GetMapping("main.html")
+    public String main() {
+        return "main";
+    }
+
     @GetMapping("index.html")
     public ModelAndView getPrincipal(ModelAndView mv) {
         Subject subject = SecurityUtils.getSubject();
