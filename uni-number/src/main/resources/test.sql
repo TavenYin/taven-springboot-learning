@@ -18,7 +18,7 @@ BEGIN
    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET t_error=1;
    START TRANSACTION;
      /* UPDATE sys_sno  SET sValue=sValue WHERE sCode=tsCode;  */
-      SELECT sValue INTO tsValue  FROM sys_sno  WHERE sCode=tsCode;
+      SELECT sValue INTO tsValue  FROM sys_sno  WHERE sCode=tsCode FOR UPDATE;
       SELECT sQz INTO tsQZ FROM sys_sno WHERE sCode=tsCode ;
     -- 因子表中没有记录，插入初始值
       IF tsValue IS NULL  THEN

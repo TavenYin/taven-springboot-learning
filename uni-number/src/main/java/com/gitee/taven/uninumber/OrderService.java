@@ -39,8 +39,11 @@ public class OrderService {
                 Map<String, String> parameterMap = initParameterMap();
                 orderMapper.createOrderNum(parameterMap);
                 String number = parameterMap.get("result");
+                System.out.println(Thread.currentThread().getName() + " : " +number);
+
             } catch (Exception e) {
                 System.out.println(e);
+
             }
         }
 
