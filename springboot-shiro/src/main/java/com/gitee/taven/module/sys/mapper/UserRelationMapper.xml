@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gitee.taven.module.sys.mapper.UserRelationMapper" >
+
+  <resultMap id="RolesAndPermissionsMap" type="com.gitee.taven.module.sys.dto.AuthorizationDTO">
+    <id column="userId" property="userId"></id>
+    <collection property="roles" ofType="com.gitee.taven.module.sys.entity.Role">
+      <id column="roleId" property="id"></id>
+      <result column="roleName" property="roleName"></result>
+      <result column="roleCode" property="roleCode"></result>
+    </collection>
+    <collection property="permissions" ofType="com.gitee.taven.module.sys.entity.Permission">
+      <id column="permissionId" property="id"></id>
+      <result column="permission_name" property="permissionName"></result>
+      <result column="permission_type" property="permissionType"></result>
+      <result column="permission_code" property="permissionCode"></result>
+    </collection>
+  </resultMap>
+
+  <select id="getRolesAndPermissions" resultMap="RolesAndPermissionsMap">
+    SELECT
+        ur.id userId,
+        r.id roleId,
+        r.role_name roleName,
+        r.role_code roleCode,
+        p.id permissionId,
+        p.permission_name,
+        p.permission_type,
+        p.permission_code
+    FROM
+        sys_user_role_ref ur
+        LEFT JOIN sys_role r ON r.id = ur.role_id
+        LEFT JOIN sys_role_permission_ref rp ON r.id = rp.role_id
+        LEFT JOIN sys_permission p ON p.id = rp.permission_id
+    WHERE
+        ur.is_delete = '0'
+        AND r.is_delete = '0'
+        AND p.is_delete = '0'
+        AND rp.is_delete = '0'
+        AND ur.user_id = #{userId}
+        AND p.permission_type = '2'
+  </select>
+
+</mapper>

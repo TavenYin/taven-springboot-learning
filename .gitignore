@@ -31,3 +31,5 @@
 /spring-boot-jwt/target
 /springboot-validate/target
 /springboot-redis/target
+/springboot-shiro/target
+/uni-number/target
