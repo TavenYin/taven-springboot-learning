@@ -43,9 +43,9 @@ public class ShiroConfig {
         chainDefinition.put("/layui/**", "anon");
         chainDefinition.put("/login", "anon");
         chainDefinition.put("/login.html", "anon");
-        // 用户为授权通过或者RememberMe && 包含'admin'角色
+        // 用户为授权通过认证 && 包含'admin'角色
         chainDefinition.put("/admin/**", "authc, roles[super_admin]");
-        // 用户为授权通过或者RememberMe && 包含'document:read'权限
+        // 用户为授权通过认证或者RememberMe && 包含'document:read'权限
         chainDefinition.put("/docs/**", "user, perms[document:read]");
         // 用户访问所有请求 授权通过 || RememberMe
         chainDefinition.put("/**", "user");
@@ -129,6 +129,11 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
+    /**
+     * thymeleaf的shiro扩展
+     *
+     * @return
+     */
     @Bean
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
