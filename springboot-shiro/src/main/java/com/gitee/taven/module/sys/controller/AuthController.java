@@ -1,6 +1,6 @@
 package com.gitee.taven.module.sys.controller;
 
-import com.gitee.taven.core.shiro.AuthRealm;
+import com.gitee.taven.core.shiro.ShiroRealm;
 import com.gitee.taven.core.shiro.ShiroUser;
 import com.gitee.taven.module.sys.bean.UserBean;
 import com.gitee.taven.module.base.AjaxResult;
@@ -38,7 +38,12 @@ public class AuthController {
         Subject subject = SecurityUtils.getSubject();
         try {
             if (!subject.isAuthenticated()) {
-                subject.login(user.createToken());
+                UsernamePasswordToken token = new UsernamePasswordToken(
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getRememberMe()
+                );
+                subject.login(token);
             }
 
         } catch (UnknownAccountException e) {
@@ -55,6 +60,7 @@ public class AuthController {
 
         } catch (ExcessiveAttemptsException e) {
             log.error("操作过于频繁请稍后再试", e);
+            return AjaxResult.failResponse("操作过于频繁请稍后再试");
 
         } catch (AuthenticationException e) {
             log.error("未知错误", e);
@@ -70,11 +76,6 @@ public class AuthController {
         return "redirect:login.html";
     }
 
-    @GetMapping("main.html")
-    public String main() {
-        return "main";
-    }
-
     @GetMapping("index.html")
     public ModelAndView getPrincipal(ModelAndView mv) {
         Subject subject = SecurityUtils.getSubject();
@@ -87,9 +88,10 @@ public class AuthController {
     @GetMapping("clear_shiro_cache")
     @ResponseBody
     public AjaxResult clearShiroCache() {
+        // 当用户的角色或者权限信息，变更了后需要刷新 shiro 中的权限缓存
         Subject subject = SecurityUtils.getSubject();
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
-        AuthRealm authRealm = (AuthRealm) securityManager.getRealms().iterator().next();
+        ShiroRealm authRealm = (ShiroRealm) securityManager.getRealms().iterator().next();
         // shiro 默认用 Principals 作为缓存key
         authRealm.getAuthorizationCache().remove(subject.getPrincipals());
         return AjaxResult.successResponse("clear");
@@ -99,14 +101,14 @@ public class AuthController {
     @ResponseBody
     public Object hasRole(String role) {
         Subject subject = SecurityUtils.getSubject();
-        return subject.hasRole(role) ? "yes" : "no";
+        return subject.hasRole(role);
     }
 
     @GetMapping("admin/has_p")
     @ResponseBody
     public Object hasPermission(String p) {
         Subject subject = SecurityUtils.getSubject();
-        return subject.isPermitted(p) ? "yes" : "no";
+        return subject.isPermitted(p);
     }
 
 }

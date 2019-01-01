@@ -2,8 +2,7 @@ package com.gitee.taven.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.gitee.taven.core.shiro.AuthCredentialsMatcher;
-import com.gitee.taven.core.shiro.AuthRealm;
-import com.gitee.taven.module.sys.controller.AuthController;
+import com.gitee.taven.core.shiro.ShiroRealm;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -28,7 +27,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger log = LoggerFactory.getLogger(ShiroConfig.class);
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
@@ -51,14 +50,16 @@ public class ShiroConfig {
         chainDefinition.put("/**", "user");
 
         shiroFilter.setFilterChainDefinitionMap(chainDefinition);
+        // 当 用户身份失效时重定向到 loginUrl
         shiroFilter.setLoginUrl("/login.html");
+        // 用户登录后默认重定向请求
         shiroFilter.setSuccessUrl("/index.html");
         return shiroFilter;
     }
 
     @Bean
     public Realm realm() {
-        AuthRealm realm = new AuthRealm();
+        ShiroRealm realm = new ShiroRealm();
         realm.setCredentialsMatcher(credentialsMatcher());
         realm.setCacheManager(ehCacheManager());
         return realm;

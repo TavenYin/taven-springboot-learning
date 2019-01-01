@@ -16,12 +16,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-public class AuthRealm extends AuthorizingRealm {
+public class ShiroRealm extends AuthorizingRealm {
 
     private static final Logger log = LoggerFactory.getLogger(AuthorizingRealm.class);
 
     @Autowired
-    //    @Lazy
+    @Lazy // 这里lazy 是有必要的, shiro组件会预先加载，导致依赖的bean 没有生成代理对象（AOP失效）
     private UserService userService;
 
     /**
