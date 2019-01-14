@@ -7,4 +7,8 @@ public interface UserService {
     User selectOneByExample(UserExample example);
 
     void select();
+
+    void selectList();
+
+    void batchMode();
 }

@@ -289,4 +289,9 @@
       modifyUser = #{modifyuser,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectUserList" resultType="hashmap">
+    select * from sys_user
+  </select>
+
 </mapper>

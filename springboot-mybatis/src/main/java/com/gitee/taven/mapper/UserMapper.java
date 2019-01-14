@@ -1,6 +1,7 @@
 package com.gitee.taven.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gitee.taven.entity.User;
 import com.gitee.taven.entity.UserExample;
@@ -30,4 +31,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<Map> selectUserList();
 }
