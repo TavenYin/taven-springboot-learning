@@ -22,6 +22,11 @@ public class App {
 		return userService.findUserById(id);
 	}
 
+	@GetMapping("findUser")
+	public Object findUser(Integer id) {
+		return userService.findUserById(new User(id));
+	}
+
 	@GetMapping("add")
 	public Object add(Integer id, String name) {
 		userService.add(new User(id, name));

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +28,19 @@ import java.util.Set;
 @EnableCaching
 public class RedisConfig {
 
-	@Value("${cache.default.expire-time:1800}")
+	@Value("${cache.default.expire-time}")
 	private int defaultExpireTime;
-	@Value("${cache.test.expire-time:180}")
-	private int testExpireTime;
-	@Value("${cache.test.name:test}")
-	private String testCacheName;
+	@Value("${cache.user.expire-time}")
+	private int userCacheExpireTime;
+	@Value("${cache.user.name}")
+	private String userCacheName;
 
-	//缓存管理器
+    /**
+     * 缓存管理器
+     *
+     * @param lettuceConnectionFactory
+     * @return
+     */
 	@Bean
 	public CacheManager cacheManager(RedisConnectionFactory lettuceConnectionFactory) {
 		RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
@@ -50,11 +54,11 @@ public class RedisConfig {
 				.disableCachingNullValues();
 
 		Set<String> cacheNames = new HashSet<>();
-		cacheNames.add(testCacheName);
+		cacheNames.add(userCacheName);
 
 		// 对每个缓存空间应用不同的配置
 		Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
-		configMap.put(testCacheName, defaultCacheConfig.entryTtl(Duration.ofSeconds(testExpireTime)));
+		configMap.put(userCacheName, defaultCacheConfig.entryTtl(Duration.ofSeconds(userCacheExpireTime)));
 
 		RedisCacheManager cacheManager = RedisCacheManager.builder(lettuceConnectionFactory)
 				.cacheDefaults(defaultCacheConfig)
@@ -64,21 +68,27 @@ public class RedisConfig {
 		return cacheManager;
 	}
 
-	@Bean
-	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
-		StringRedisTemplate template = new StringRedisTemplate(factory);
-		setSerializer(template);// 设置序列化工具
-		template.afterPropertiesSet();
-		return template;
-	}
-
-	private void setSerializer(StringRedisTemplate template) {
-		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-		ObjectMapper om = new ObjectMapper();
-		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-		jackson2JsonRedisSerializer.setObjectMapper(om);
-		template.setValueSerializer(jackson2JsonRedisSerializer);
-	}
+    /**
+     * 配置 RedisTemplate 序列化策略，与缓存无关
+     *
+     * @param lettuceConnectionFactory
+     * @return
+     */
+//	@Bean
+//	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory lettuceConnectionFactory) {
+//		StringRedisTemplate template = new StringRedisTemplate(lettuceConnectionFactory);
+//        template.setValueSerializer(valueSerializer());
+//		template.afterPropertiesSet();
+//		return template;
+//	}
+//
+//	private Jackson2JsonRedisSerializer valueSerializer() {
+//		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+//		ObjectMapper om = new ObjectMapper();
+//		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+//		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//		jackson2JsonRedisSerializer.setObjectMapper(om);
+//		return jackson2JsonRedisSerializer;
+//	}
 	
 }
