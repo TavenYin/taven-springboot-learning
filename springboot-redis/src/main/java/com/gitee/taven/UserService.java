@@ -7,24 +7,50 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-@CacheConfig(cacheNames="user")
+@CacheConfig(cacheNames="user")// cacheName 是一定要指定的属性，可以通过 @CacheConfig 声明该类的通用配置
 public class UserService {
 
-	@Cacheable
+	/**
+	 * 将结果缓存，当参数相同时，不会执行方法，从缓存中取
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Cacheable(key = "#id")
 	public User findUserById(Integer id) {
-		System.out.println("执行了findUserById(), id = " + id);
+		System.out.println("===> findUserById(id), id = " + id);
 		return new User(id, "taven");
 	}
 
-	@CachePut
-	public User findUserById(User user) {
-		System.out.println("执行了findUserById(), user = " + user);
-		return new User(user.getId(), "yintianwen");
+	/**
+	 * 将结果缓存，并且该方法不管缓存是否存在，每次都会执行
+	 *
+	 * @param user
+	 * @return
+	 */
+	@CachePut(key = "#user.id")
+	public User update(User user) {
+		System.out.println("===> update(user), user = " + user);
+		return user;
 	}
 
-	@CacheEvict
-	public void add(User user) {
-		System.out.println("执行了add(), user = " + user);
+	/**
+	 * 移除缓存，根据指定key
+	 *
+	 * @param user
+	 */
+	@CacheEvict(key = "#user.id")
+	public void deleteById(User user) {
+		System.out.println("===> deleteById(), user = " + user);
+	}
+
+	/**
+	 * 移除当前 cacheName下所有缓存
+	 *
+	 */
+	@CacheEvict(allEntries = true)
+	public void deleteAll() {
+		System.out.println("===> deleteAll()");
 	}
 
 }

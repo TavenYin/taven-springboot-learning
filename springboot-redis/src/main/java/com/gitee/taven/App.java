@@ -22,14 +22,20 @@ public class App {
 		return userService.findUserById(id);
 	}
 
-	@GetMapping("findUser")
-	public Object findUser(Integer id) {
-		return userService.findUserById(new User(id));
+	@GetMapping("update")
+	public Object update(Integer id, String name) {
+		return userService.update(new User(id, name));
 	}
 
-	@GetMapping("add")
-	public Object add(Integer id, String name) {
-		userService.add(new User(id, name));
-		return "成功";
+	@GetMapping("delete")
+	public Object delete(Integer id) {
+		userService.deleteById(new User(id));
+		return "移除缓存 key = " + id;
+	}
+
+	@GetMapping("deleteAll")
+	public Object deleteAll() {
+		userService.deleteAll();
+		return "移除所有缓存";
 	}
 }
