@@ -67,6 +67,7 @@ public class App {
 		ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
 		//写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
 		Sheet sheet1 = new Sheet(1, 0, EasyModel.class);
+		sheet1.setAutoWidth(true);
 		writer.write(getEasyData(), sheet1);
 		writer.finish();
 		out.flush();
@@ -82,7 +83,26 @@ public class App {
 
 	@GetMapping("mutilHeadRead")
 	public Object mutilHeadRead() throws FileNotFoundException {
-		return null;
+		File excel = ResourceUtils.getFile("classpath:read1.xls");
+		InputStream inputStream = new BufferedInputStream(new FileInputStream(excel));
+
+		Object result = null;
+		try {
+//			ExcelListener listener = new ExcelListener();
+			result = EasyExcelFactory.read(inputStream, new Sheet(2, 3, MultiLineHeadExcelModel.class));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
 	}
 
 	@GetMapping("mutilHeadWrite")
@@ -96,6 +116,7 @@ public class App {
 		ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
 		//写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
 		Sheet sheet1 = new Sheet(1, 0, MultiLineHeadExcelModel.class);
+		sheet1.setAutoWidth(true);
 		writer.write(getMutilData(), sheet1);
 		writer.finish();
 		out.flush();

@@ -5,6 +5,7 @@ import com.alibaba.excel.metadata.BaseRowModel;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class EasyModel extends BaseRowModel {
 
@@ -72,4 +73,11 @@ public class EasyModel extends BaseRowModel {
                 ", balance=" + balance +
                 '}';
     }
+
+    public static void main(String[] args) {
+        String str = "333";
+        Pattern pattern = Pattern.compile("[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*");
+        System.out.println( pattern.matcher(str).matches());
+    }
+
 }
