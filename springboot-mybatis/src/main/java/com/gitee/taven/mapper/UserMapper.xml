@@ -183,6 +183,7 @@
       </if>
     </trim>
   </insert>
+
   <select id="countByExample" parameterType="com.gitee.taven.entity.UserExample" resultType="java.lang.Integer" >
     select count(*) from sys_user
     <if test="_parameter != null" >
@@ -293,5 +294,38 @@
   <select id="selectUserList" resultType="hashmap">
     select * from sys_user
   </select>
+
+  <insert id="insertReturnId">
+    <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+      select uuid()
+    </selectKey>
+    insert into sys_user (id, username, password,
+    user_type, is_lock, is_delete,
+    create_time, create_user, modify_time,
+    modifyUser)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    #{userType,jdbcType=CHAR}, #{isLock,jdbcType=CHAR}, #{isDelete,jdbcType=CHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+    #{modifyuser,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertOrUpdateReturnId">
+    <selectKey keyProperty="id" resultType="java.lang.String" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_user (id, username, password,
+    user_type, is_lock, is_delete,
+    create_time, create_user, modify_time,
+    modifyUser)
+    values (uuid(), #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    #{userType,jdbcType=CHAR}, #{isLock,jdbcType=CHAR}, #{isDelete,jdbcType=CHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+    #{modifyuser,jdbcType=VARCHAR})
+    ON DUPLICATE KEY UPDATE modify_time = now()
+  </insert>
+
+  <insert id="insertBatchReturnId">
+
+  </insert>
 
 </mapper>

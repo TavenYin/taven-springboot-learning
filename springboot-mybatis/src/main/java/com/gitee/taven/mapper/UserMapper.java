@@ -33,4 +33,10 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     List<Map> selectUserList();
+
+    int insertReturnId(User user);
+
+    int insertOrUpdateReturnId(User user);
+
+    int insertBatchReturnId(User user);
 }
