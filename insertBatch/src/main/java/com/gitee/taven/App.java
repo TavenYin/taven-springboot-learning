@@ -1,4 +1,5 @@
 package com.gitee.taven;
+import java.sql.SQLException;
 import java.util.Date;
 
 import com.gitee.taven.entity.User;
@@ -39,13 +40,26 @@ public class App {
 		return "结束";
 	}
 
-	@GetMapping("/start2")
-	public Object start2() {
+	@GetMapping("/start3")
+	public Object start3() {
 		List<User> userList = getData();
 		long start, end;
 		start = System.currentTimeMillis();
 
 		appService.jdbcBatch(userList);
+
+		end = System.currentTimeMillis();
+		System.out.println("insert Time:" + (end - start) + "(ms)");
+		return "结束";
+	}
+
+	@GetMapping("/start4")
+	public Object start4() throws SQLException {
+		List<User> userList = getData();
+		long start, end;
+		start = System.currentTimeMillis();
+
+		appService.nativeJdbcBatch(userList);
 
 		end = System.currentTimeMillis();
 		System.out.println("insert Time:" + (end - start) + "(ms)");
