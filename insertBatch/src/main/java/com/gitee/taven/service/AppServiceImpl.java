@@ -1,14 +1,19 @@
 package com.gitee.taven.service;
 
+import com.gitee.taven.MyBatisBatchSupport;
 import com.gitee.taven.entity.User;
 import com.gitee.taven.entity.UserExample;
 import com.gitee.taven.mapper.UserMapper;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,6 +28,12 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
+
+    /**
+     * 清理测试数据
+     */
     @Override
     public void clearData() {
         UserExample example = new UserExample();
@@ -30,17 +41,50 @@ public class AppServiceImpl implements AppService {
         userMapper.deleteByExample(example);
     }
 
+    /**
+     * mybatis 拼接
+     *
+     * @param userList
+     */
     @Override
     @Transactional
     public void mybatisInsert(List<User> userList) {
         userMapper.insertBatch(userList);
     }
 
+    /**
+     * mybatis 批处理
+     *
+     * @param userList
+     */
     @Override
     public void mybatisBatch(List<User> userList) {
-
+//        SqlSession session = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+//
+//        try {
+//            for (Object obj : userList) {
+//                session.insert("com.gitee.taven.mapper.UserMapper.insert", obj);
+//            }
+//            session.flushStatements();
+//            session.commit();
+//            session.clearCache();
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            session.rollback();
+//
+//        } finally {
+//            session.close();
+//        }
+        MyBatisBatchSupport.batchInsert(sqlSessionTemplate.getSqlSessionFactory(),
+                "com.gitee.taven.mapper.UserMapper.insert", userList);
     }
 
+    /**
+     * jdbcTemplate 批处理
+     *
+     * @param userList
+     */
     @Override
     @Transactional
     public void jdbcBatch(List<User> userList) {
@@ -62,6 +106,12 @@ public class AppServiceImpl implements AppService {
         jdbcTemplate.batchUpdate(sql, setter);
     }
 
+    /**
+     * 原生JDBC
+     *
+     * @param userList
+     * @throws SQLException
+     */
     @Override
     public void nativeJdbcBatch(List<User> userList) throws SQLException {
         // 这里直接从连接池里拿一个连接

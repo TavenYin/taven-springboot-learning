@@ -30,6 +30,7 @@ public class App {
 	@GetMapping("/start1")
 	public Object start() {
 		List<User> userList = getData();
+		appService.clearData();
 		long start, end;
 		start = System.currentTimeMillis();
 
@@ -40,9 +41,24 @@ public class App {
 		return "结束";
 	}
 
+	@GetMapping("/start2")
+	public Object start2() {
+		List<User> userList = getData();
+		appService.clearData();
+		long start, end;
+		start = System.currentTimeMillis();
+
+		appService.mybatisBatch(userList);
+
+		end = System.currentTimeMillis();
+		System.out.println("insert Time:" + (end - start) + "(ms)");
+		return "结束";
+	}
+
 	@GetMapping("/start3")
 	public Object start3() {
 		List<User> userList = getData();
+		appService.clearData();
 		long start, end;
 		start = System.currentTimeMillis();
 
@@ -56,6 +72,7 @@ public class App {
 	@GetMapping("/start4")
 	public Object start4() throws SQLException {
 		List<User> userList = getData();
+		appService.clearData();
 		long start, end;
 		start = System.currentTimeMillis();
 
