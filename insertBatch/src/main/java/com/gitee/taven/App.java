@@ -1,16 +1,20 @@
 package com.gitee.taven;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.gitee.taven.entity.User;
 import com.gitee.taven.service.AppService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,15 +26,31 @@ public class App {
 
 	@Autowired
 	private AppService appService;
+	@Autowired
+	private DataSource dataSource;
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
 
+	@GetMapping("/support")
+	public Object support() throws SQLException {
+		String mes;
+
+		boolean isSupportBatch = dataSource.getConnection().getMetaData().supportsBatchUpdates();
+		if (isSupportBatch) {
+			System.out.println(mes = "JDBC 驱动支持批处理");
+			return mes;
+
+		} else {
+			System.out.println(mes = "JDBC 驱动不支持批处理");
+			return mes;
+		}
+	}
+
 	@GetMapping("/start1")
 	public Object start() {
 		List<User> userList = getData();
-		appService.clearData();
 		long start, end;
 		start = System.currentTimeMillis();
 
@@ -38,13 +58,14 @@ public class App {
 
 		end = System.currentTimeMillis();
 		System.out.println("insert Time:" + (end - start) + "(ms)");
+		
 		return "结束";
 	}
 
 	@GetMapping("/start2")
 	public Object start2() {
 		List<User> userList = getData();
-		appService.clearData();
+		
 		long start, end;
 		start = System.currentTimeMillis();
 
@@ -52,13 +73,14 @@ public class App {
 
 		end = System.currentTimeMillis();
 		System.out.println("insert Time:" + (end - start) + "(ms)");
+		
 		return "结束";
 	}
 
 	@GetMapping("/start3")
 	public Object start3() {
 		List<User> userList = getData();
-		appService.clearData();
+		
 		long start, end;
 		start = System.currentTimeMillis();
 
@@ -72,7 +94,7 @@ public class App {
 	@GetMapping("/start4")
 	public Object start4() throws SQLException {
 		List<User> userList = getData();
-		appService.clearData();
+		
 		long start, end;
 		start = System.currentTimeMillis();
 

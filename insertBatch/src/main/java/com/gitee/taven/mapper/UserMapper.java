@@ -34,4 +34,5 @@ public interface UserMapper {
 
     int insertBatch(List<User> list);
 
+    int insert2(User record);
 }

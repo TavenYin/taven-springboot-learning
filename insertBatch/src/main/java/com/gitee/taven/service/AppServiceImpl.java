@@ -77,7 +77,7 @@ public class AppServiceImpl implements AppService {
 //            session.close();
 //        }
         MyBatisBatchSupport.batchInsert(sqlSessionTemplate.getSqlSessionFactory(),
-                "com.gitee.taven.mapper.UserMapper.insert", userList);
+                "com.gitee.taven.mapper.UserMapper.insert2", userList);
     }
 
     /**
