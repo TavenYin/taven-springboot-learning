@@ -24,6 +24,10 @@ import java.util.UUID;
 @RestController
 public class App {
 
+	private static final int TEST_COUNT = 4;
+
+	private static final int TEST_DATA_COUNT = 100000;
+
 	@Autowired
 	private AppService appService;
 	@Autowired
@@ -31,6 +35,31 @@ public class App {
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
+	}
+
+	@GetMapping("/test")
+	public Object test() {
+		List<User> userList = getData();
+
+		for (int i=0; i<TEST_COUNT; i++) {
+			appService.clearData();
+			appService.mybatisInsert(userList);
+
+		}
+
+		for (int i=0; i<TEST_COUNT; i++) {
+			appService.clearData();
+			appService.mybatisBatch(userList);
+
+		}
+
+		for (int i=0; i<TEST_COUNT; i++) {
+			appService.clearData();
+			appService.jdbcBatch(userList);
+
+		}
+
+		return "ok";
 	}
 
 	@GetMapping("/support")
@@ -51,69 +80,63 @@ public class App {
 	@GetMapping("/start1")
 	public Object start() {
 		List<User> userList = getData();
-		long start, end;
-		start = System.currentTimeMillis();
-
 		appService.mybatisInsert(userList);
-
-		end = System.currentTimeMillis();
-		System.out.println("insert Time:" + (end - start) + "(ms)");
-		
 		return "结束";
 	}
 
 	@GetMapping("/start2")
 	public Object start2() {
 		List<User> userList = getData();
-		
-		long start, end;
-		start = System.currentTimeMillis();
-
 		appService.mybatisBatch(userList);
-
-		end = System.currentTimeMillis();
-		System.out.println("insert Time:" + (end - start) + "(ms)");
-		
 		return "结束";
 	}
 
 	@GetMapping("/start3")
 	public Object start3() {
 		List<User> userList = getData();
-		
-		long start, end;
-		start = System.currentTimeMillis();
-
 		appService.jdbcBatch(userList);
-
-		end = System.currentTimeMillis();
-		System.out.println("insert Time:" + (end - start) + "(ms)");
 		return "结束";
 	}
 
 	@GetMapping("/start4")
 	public Object start4() throws SQLException {
 		List<User> userList = getData();
-		
-		long start, end;
-		start = System.currentTimeMillis();
-
 		appService.nativeJdbcBatch(userList);
-
-		end = System.currentTimeMillis();
-		System.out.println("insert Time:" + (end - start) + "(ms)");
 		return "结束";
 	}
 
 	private List<User> getData() {
 		List<User> userList = new ArrayList<>();
 
-		for (int i=0; i<100000; i++) {
+		for (int i=0; i<TEST_DATA_COUNT; i++) {
 			String uuid = get32UUID();
 			User user = new User();
 			user.setId(uuid);
 			user.setUsername("USERNAME_" + uuid);
 			user.setPassword("PWD_" + uuid);
+			user.setUserType("");
+			user.setIsLock("");
+			user.setIsDelete("");
+			user.setCreateTime(new Date());
+			user.setCreateUser("");
+			user.setModifyTime(new Date());
+			user.setModifyuser("");
+			userList.add(user);
+
+		}
+
+		return userList;
+	}
+
+	private List<User> getEasyData() {
+		List<User> userList = new ArrayList<>();
+
+		for (int i=0; i<TEST_DATA_COUNT; i++) {
+			String x = ((Integer) i).toString();
+			User user = new User();
+			user.setId(x);
+			user.setUsername("1");
+			user.setPassword("1");
 			user.setUserType("");
 			user.setIsLock("");
 			user.setIsDelete("");
