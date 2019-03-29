@@ -8,6 +8,12 @@ import redis.clients.jedis.Jedis;
 
 import java.util.Collections;
 
+/**
+ * Redis 分布式锁实现
+ * 如有疑问可参考 @see <a href="https://www.cnblogs.com/linjiqin/p/8003838.html">Redis分布式锁的正确实现方式</a>
+ *
+ *
+ */
 @Service
 public class RedisLock {
 

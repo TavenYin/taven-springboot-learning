@@ -36,3 +36,5 @@
 /springboot-mybatis/target
 /easyexcel-demo/target
 /insertBatch/target
+/downloadJar/target
+/repeat-submit-intercept/target
