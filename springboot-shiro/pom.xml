@@ -71,7 +71,7 @@
 			<artifactId>shiro-ehcache</artifactId>
 			<version>1.4.0</version>
 		</dependency>
-
+		<!-- 基于thymeleaf的shiro扩展 -->
 		<dependency>
 			<groupId>com.github.theborakompanioni</groupId>
 			<artifactId>thymeleaf-extras-shiro</artifactId>

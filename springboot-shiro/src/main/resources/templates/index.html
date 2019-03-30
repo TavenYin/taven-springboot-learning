@@ -1,103 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>首页</title>
-    <link rel="stylesheet" href="/layui/css/layui.css">
-    <link rel="stylesheet" href="/css/jq-ui/gray/tab.css"/>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
 </head>
-<body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
-        <div class="layui-logo">后台管理系统</div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item">
-                <a id="main" href="javascript:; "onclick="$('#tab1').tab('addRemoteTab', {'title': '主页', 'id': 'tab0', 'url': '/main.html', 'method': 'get'});">
-                    <i class="layui-icon layui-icon-home" style="font-size: 17px;"></i> 主页
-                </a>
-            </li>
-            <!--<li class="layui-nav-item"><a href="">商品管理</a></li>-->
-            <!--<li class="layui-nav-item"><a href="">用户</a></li>-->
-            <!--<li class="layui-nav-item">-->
-                <!--<a href="javascript:;">其它系统</a>-->
-                <!--<dl class="layui-nav-child">-->
-                    <!--<dd><a href="">邮件管理</a></dd>-->
-                    <!--<dd><a href="">消息管理</a></dd>-->
-                    <!--<dd><a href="">授权管理</a></dd>-->
-                <!--</dl>-->
-            <!--</li>-->
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item">
-                <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    <span th:text="${principal}"></span>
-                </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item"><a href="">退了</a></li>
-        </ul>
-    </div>
-
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">所有商品</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" onclick="$('#tab1').tab('addRemoteTab', {'title': '选项卡插件手册', 'id': 'tab1', 'url': '/user/index.html', 'method': 'get'});">列表一</a></dd>
-                        <dd><a href="javascript:;" onclick="$('#tab1').tab('addRemoteTab', {'title': '选项卡插件手册2', 'id': 'tab2', 'url': '/role/index.html', 'method': 'get'});">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">解决方案</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="">云市场</a></li>
-                <li class="layui-nav-item"><a href="">发布商品</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- 此处设置z-index 保证导航栏插件在最上层 -->
-    <div class="layui-body" style="z-index: -444;">
-        <div id="tab1">
-            <ul></ul>
-            <div></div>
-        </div>
-    </div>
-
-    <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
-    </div>
+<body>
+你好, <span th:text="${principal}"></span><br>
+<p shiro:hasRole="super_admin">当前角色超级管理员</p>
+<button shiro:hasPermission="'sys:user:add'">添加</button>
+<button shiro:hasPermission="'sys:user:update'">编辑</button>
+<button shiro:hasPermission="'sys:user:lock'">冻结</button>
+<div shiro:hasAllPermissions="'sys:user:add, sys:user:update, sys:user:lock'">
+    <span>满足所有权限时显示</span>
 </div>
-<script src="/layui/layui.js"></script>
-<script src="/js/jquery-3.3.1.min.js"></script>
-<script src="/js/tab.js"></script>
-<script>
-    //JavaScript代码区域
-    layui.use('element', function(){
-        var element = layui.element;
-
-    });
-
-    $(function() {
-        $("#tab1").tab();
-        $("#main").click();
-    });
-</script>
+<div shiro:hasAnyPermissions="'sys:user:add, sys:user:update, sys:user:lock'">
+    <span>满足一个权限即可显示</span>
+</div>
 </body>
 </html>

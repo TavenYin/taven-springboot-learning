@@ -2,8 +2,7 @@ package com.gitee.taven.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.gitee.taven.core.shiro.AuthCredentialsMatcher;
-import com.gitee.taven.core.shiro.AuthRealm;
-import com.gitee.taven.module.sys.controller.AuthController;
+import com.gitee.taven.core.shiro.ShiroRealm;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -28,7 +27,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger log = LoggerFactory.getLogger(ShiroConfig.class);
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
@@ -43,22 +42,24 @@ public class ShiroConfig {
         chainDefinition.put("/layui/**", "anon");
         chainDefinition.put("/login", "anon");
         chainDefinition.put("/login.html", "anon");
-        // 用户为授权通过或者RememberMe && 包含'admin'角色
+        // 用户为授权通过认证 && 包含'admin'角色
         chainDefinition.put("/admin/**", "authc, roles[super_admin]");
-        // 用户为授权通过或者RememberMe && 包含'document:read'权限
+        // 用户为授权通过认证或者RememberMe && 包含'document:read'权限
         chainDefinition.put("/docs/**", "user, perms[document:read]");
         // 用户访问所有请求 授权通过 || RememberMe
         chainDefinition.put("/**", "user");
 
         shiroFilter.setFilterChainDefinitionMap(chainDefinition);
+        // 当 用户身份失效时重定向到 loginUrl
         shiroFilter.setLoginUrl("/login.html");
+        // 用户登录后默认重定向请求
         shiroFilter.setSuccessUrl("/index.html");
         return shiroFilter;
     }
 
     @Bean
     public Realm realm() {
-        AuthRealm realm = new AuthRealm();
+        ShiroRealm realm = new ShiroRealm();
         realm.setCredentialsMatcher(credentialsMatcher());
         realm.setCacheManager(ehCacheManager());
         return realm;
@@ -129,6 +130,11 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
+    /**
+     * thymeleaf的shiro扩展
+     *
+     * @return
+     */
     @Bean
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();

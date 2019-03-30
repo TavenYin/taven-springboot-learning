@@ -17,10 +17,6 @@ public class UserBean {
 
     private boolean rememberMe = false;
 
-    public UsernamePasswordToken createToken() {
-        return new UsernamePasswordToken(this.username, this.password, this.rememberMe);
-    }
-
     public Integer getId() {
         return id;
     }
@@ -45,7 +41,7 @@ public class UserBean {
         this.password = password;
     }
 
-    public boolean isRememberMe() {
+    public boolean getRememberMe() {
         return rememberMe;
     }
 

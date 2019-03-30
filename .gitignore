@@ -33,3 +33,8 @@
 /springboot-redis/target
 /springboot-shiro/target
 /uni-number/target
+/springboot-mybatis/target
+/easyexcel-demo/target
+/insertBatch/target
+/downloadJar/target
+/repeat-submit-intercept/target
