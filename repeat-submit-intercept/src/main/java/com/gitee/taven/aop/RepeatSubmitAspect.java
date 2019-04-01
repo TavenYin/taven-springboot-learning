@@ -3,6 +3,7 @@ package com.gitee.taven.aop;
 import com.gitee.taven.ApiResult;
 import com.gitee.taven.utils.RedisLock;
 import com.gitee.taven.utils.RequestUtils;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -23,11 +24,14 @@ public class RepeatSubmitAspect {
     @Autowired
     private RedisLock redisLock;
 
-    @Pointcut("@annotation(com.gitee.taven.aop.NoRepeatSubmit)")
-    public void pointCut() {}
+    @Pointcut("@annotation(noRepeatSubmit)")
+    public void pointCut(NoRepeatSubmit noRepeatSubmit) {
+    }
 
-    @Around("pointCut()")
-    public Object before(ProceedingJoinPoint pjp) {
+    @Around("pointCut(noRepeatSubmit)")
+    public Object around(ProceedingJoinPoint pjp, NoRepeatSubmit noRepeatSubmit) {
+        int lockSeconds = noRepeatSubmit.lockTime();
+
         try {
             HttpServletRequest request = RequestUtils.getRequest();
             Assert.notNull(request, "request can not null");
@@ -38,7 +42,7 @@ public class RepeatSubmitAspect {
             String key = getKey(token, path);
             String clientId = getClientId();
 
-            boolean isSuccess = redisLock.tryLock(key, clientId, 10);
+            boolean isSuccess = redisLock.tryLock(key, clientId, lockSeconds);
             LOGGER.info("tryLock key = [{}], clientId = [{}]", key, clientId);
 
             if (isSuccess) {

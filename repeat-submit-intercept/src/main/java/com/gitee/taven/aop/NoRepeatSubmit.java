@@ -8,4 +8,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NoRepeatSubmit {
+
+    /**
+     * 设置请求锁定时间
+     *
+     * @return
+     */
+    int lockTime() default 10;
+
 }
