@@ -14,7 +14,7 @@ public class SubmitController {
     public Object submit(@RequestBody UserBean userBean) {
         try {
             // 模拟业务场景
-            Thread.sleep(5000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
