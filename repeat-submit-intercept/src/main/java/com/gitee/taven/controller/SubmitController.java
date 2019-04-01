@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SubmitController {
 
     @PostMapping("submit")
-    @NoRepeatSubmit
+    @NoRepeatSubmit(lockTime = 30)
     public Object submit(@RequestBody UserBean userBean) {
         try {
             // 模拟业务场景
