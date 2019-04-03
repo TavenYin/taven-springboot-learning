@@ -1,8 +1,6 @@
 package com.gitee.taven;
 
-import ch.qos.logback.core.util.FileUtil;
 import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -64,8 +62,8 @@ public class App {
 		response.setContentType("multipart/form-data");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Content-disposition", "attachment;filename="+fileName+".xlsx");
+
 		ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
-		//写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
 		Sheet sheet1 = new Sheet(1, 0, EasyModel.class);
 		sheet1.setAutoWidth(true);
 		writer.write(getEasyData(), sheet1);
@@ -113,8 +111,8 @@ public class App {
 		response.setContentType("multipart/form-data");
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Content-disposition", "attachment;filename="+fileName+".xlsx");
+
 		ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
-		//写第一个sheet, sheet1  数据全是List<String> 无模型映射关系
 		Sheet sheet1 = new Sheet(1, 0, MultiLineHeadExcelModel.class);
 		sheet1.setAutoWidth(true);
 		writer.write(getMutilData(), sheet1);
@@ -142,5 +140,32 @@ public class App {
 		return list;
 	}
 
+	@GetMapping("writeWithTemplate")
+	public void writeWithTemplate(HttpServletResponse response) throws IOException {
+		ServletOutputStream out = response.getOutputStream();
+		String fileName = new String(("UserInfo " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()))
+				.getBytes(), "UTF-8");
+		response.setContentType("multipart/form-data");
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("Content-disposition", "attachment;filename="+fileName+".xlsx");
+
+		InputStream in = FileUtil.getResourcesFileInputStream("template.xlsx");
+		ExcelWriter writer = EasyExcelFactory.getWriterWithTemp(in, out, ExcelTypeEnum.XLSX,false);
+		Sheet sheet1 = new Sheet(1, 1, EasyModel.class, "sheet1", null);
+		sheet1.setAutoWidth(true);
+		sheet1.setStartRow(0);
+		writer.write(getEasyData(), sheet1);
+		writer.finish();
+		out.flush();
+		in.close();
+	}
+
+	public static class FileUtil {
+
+		public static InputStream getResourcesFileInputStream(String fileName) {
+			return Thread.currentThread().getContextClassLoader().getResourceAsStream("" + fileName);
+		}
+
+	}
 }
 
