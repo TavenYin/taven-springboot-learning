@@ -1,25 +1,16 @@
 package com.gitee.taven.filter;
 
-import javax.servlet.*;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 先标记后踢出
  *
  */
-public class MarkKickOutFilter implements Filter {
+public class MarkKickOutFilter extends KickOutFilter {
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    @Override
-    public void destroy() {
-
+    public boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) {
+        return false;
     }
 }

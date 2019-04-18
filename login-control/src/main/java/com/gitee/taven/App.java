@@ -1,6 +1,7 @@
 package com.gitee.taven;
 
 import com.gitee.taven.filter.CompareKickOutFilter;
+import com.gitee.taven.filter.KickOutFilter;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
@@ -9,8 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-
-import javax.servlet.Filter;
 
 
 @SpringBootApplication
@@ -26,14 +25,14 @@ public class App {
 	}
 
 	@Bean
-	public Filter kickOutFilter() {
+	public KickOutFilter kickOutFilter() {
 		return new CompareKickOutFilter();
 	}
 
 	@Bean
 	public FilterRegistrationBean testFilterRegistration() {
 		FilterRegistrationBean registration = new FilterRegistrationBean(kickOutFilter());
-		registration.addUrlPatterns("/*");
+		registration.addUrlPatterns("/user/*");
 		registration.setName("kickOutFilter");
 		return registration;
 	}

@@ -1,35 +1,69 @@
 package com.gitee.taven.filter;
 
-import org.redisson.api.RedissonClient;
+import com.gitee.taven.service.UserService;
+import com.gitee.taven.utils.JWTUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RBucket;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-/**
- * 比较时间戳
- *
- */
-public class CompareKickOutFilter implements Filter {
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+public class CompareKickOutFilter extends KickOutFilter {
 
     @Autowired
-    private RedissonClient redissonClient;
+    private UserService userService;
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) resp;
-        filterChain.doFilter(req, resp);
-    }
+    public boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        String username = JWTUtil.getUsername(token);
+        String lockKey = PREFIX_LOCK + username;
+        String userKey = PREFIX + username;
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+        RLock lock = redissonClient.getLock(lockKey);
+        lock.lock(5, SECONDS);
 
-    @Override
-    public void destroy() {
+        try {
+            RBucket<String> bucket = redissonClient.getBucket(userKey);
+            String redisToken = bucket.get();
+
+            if (token.equals(redisToken)) {
+                return true;
+
+            } else if (StringUtils.isBlank(redisToken)) {
+                bucket.set(token);
+
+            } else {
+                Long redisTokenUnixTime = JWTUtil.getClaim(redisToken, "createTime").asLong();
+                Long tokenUnixTime = JWTUtil.getClaim(token, "createTime").asLong();
+
+                // token > redisToken 则覆盖
+                if (tokenUnixTime.compareTo(redisTokenUnixTime) > 0) {
+                    bucket.set(token);
+
+                } else {
+                    // 注销当前token
+                    userService.logout(token);
+                    sendResponse(response, 401, "您的账号已在其他设备登录");
+                }
+
+            }
+
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+                LOGGER.info(Thread.currentThread().getName() + " unlock");
+
+            } else {
+                LOGGER.info(Thread.currentThread().getName() + " already automatically release lock");
+            }
+        }
+
+        return false;
 
     }
 }

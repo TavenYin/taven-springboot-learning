@@ -3,7 +3,6 @@ package com.gitee.taven.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -13,8 +12,10 @@ import java.util.Date;
 
 public class JWTUtil {
 
-	// 过期时间
-	private static final long EXPIRE_TIME = 525960 * 60 * 1000;
+	/**
+	 * 过期时间，单位毫秒
+	 */
+	public static final long EXPIRE_TIME_MS = 604800 * 1000;
 
 	public static final String SECRET = "SECRET";
 
@@ -73,7 +74,7 @@ public class JWTUtil {
 	 */
 	public static String sign(String username, String secret) {
 		try {
-			Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+			Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME_MS);
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			// 附带username信息
 			return JWT.create()
@@ -86,10 +87,15 @@ public class JWTUtil {
 		}
 	}
 
-	public static void verifyExpires(String token) {
+	/**
+	 * 校验token是否过期
+	 * true 过期
+	 *
+	 * @param token
+	 */
+	public static boolean verifyExpires(String token) {
 		DecodedJWT jwt = JWT.decode(token);
-		if (jwt.getExpiresAt().compareTo(new Date()) == -1)
-			throw new TokenExpiredException("token expires");
+		return jwt.getExpiresAt().compareTo(new Date()) == -1;
 	}
 
 

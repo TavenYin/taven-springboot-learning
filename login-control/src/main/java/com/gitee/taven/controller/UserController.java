@@ -17,7 +17,7 @@ public class UserController {
         return new ApiResult(200, "登录成功", userService.buildUserInfo(userDTO));
     }
 
-    @GetMapping("info")
+    @GetMapping("user/info")
     public ApiResult info(@RequestHeader("Authorization") String jwt) {
         return new ApiResult(200, null, userService.getUserByToken(jwt));
     }
