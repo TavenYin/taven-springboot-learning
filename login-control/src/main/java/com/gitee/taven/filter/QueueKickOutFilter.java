@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
  * 先标记后踢出
  *
  */
-public class MarkKickOutFilter extends KickOutFilter {
+public class QueueKickOutFilter extends KickOutFilter {
 
     @Override
     public boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) {

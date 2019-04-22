@@ -48,7 +48,7 @@ public class CompareKickOutFilter extends KickOutFilter {
                 } else {
                     // 注销当前token
                     userService.logout(token);
-                    sendResponse(response, 401, "您的账号已在其他设备登录");
+                    sendJsonResponse(response, 4001, "您的账号已在其他设备登录");
                 }
 
             }

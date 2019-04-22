@@ -1,6 +1,7 @@
 package com.gitee.taven.controller;
 
 import com.gitee.taven.pojo.ApiResult;
+import com.gitee.taven.pojo.CurrentUser;
 import com.gitee.taven.pojo.UserDTO;
 import com.gitee.taven.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class UserController {
     }
 
     @GetMapping("user/info")
-    public ApiResult info(@RequestHeader("Authorization") String jwt) {
-        return new ApiResult(200, null, userService.getUserByToken(jwt));
+    public ApiResult info() {
+        return new ApiResult(200, null, CurrentUser.get());
     }
 
     @PostMapping("logout")

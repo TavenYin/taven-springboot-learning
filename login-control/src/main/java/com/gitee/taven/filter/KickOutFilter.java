@@ -1,6 +1,8 @@
 package com.gitee.taven.filter;
 
+import com.gitee.taven.pojo.CurrentUser;
 import com.gitee.taven.pojo.UserDTO;
+import com.gitee.taven.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
@@ -20,6 +22,9 @@ public abstract class KickOutFilter implements Filter {
 
     @Autowired
     public RedissonClient redissonClient;
+
+    @Autowired
+    private UserService userService;
 
     public static final String PREFIX = "uni_token_";
 
@@ -65,40 +70,32 @@ public abstract class KickOutFilter implements Filter {
     public boolean checkToken(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader("Authorization");
         if (StringUtils.isBlank(token)) {
-            sendResponse(response, 401, "你无权访问");
+            sendJsonResponse(response, 401, "你无权访问");
             return false;
         }
 
         // 校验token是否存在
         RBucket<UserDTO> rBucket = redissonClient.getBucket(token);
+        UserDTO userDTO = rBucket.get();
 
-        if (rBucket.get() == null) {
-            sendResponse(response, 403, "令牌过期");
+        if (userDTO == null) {
+            sendJsonResponse(response, 403, "令牌过期");
             return false;
         }
 
+        CurrentUser.put(userDTO);
         return true;
     }
 
-
-    /**
-     * 发送json响应
-     *
-     * @param resp
-     * @param code
-     * @param message
-     */
-    public static void sendResponse(HttpServletResponse resp, int code, String message) {
-        responseOutWithJson(resp, String.format(jsonTemplate(), code, message));
+    public static void sendJsonResponse(HttpServletResponse resp, int code, String message) {
+        sendJsonResponse(resp, String.format(jsonTemplate(), code, message));
     }
 
     public static String jsonTemplate() {
         return "{\"code\":%s,\"msg\":\"%s\",\"data\":null,\"errors\":null}";
     }
 
-    public static void responseOutWithJson(HttpServletResponse response,
-                                              String json) {
-        //将实体对象转换为JSON Object转换
+    public static void sendJsonResponse(HttpServletResponse response, String json) {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;

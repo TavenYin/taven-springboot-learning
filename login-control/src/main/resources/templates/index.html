@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+    <button id="getInfo">GET INFO</button>
+    <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $("#getInfo").click(function(){
+            $.ajax({
+
+                url:"/user/info",
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function(request) {
+                    request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                },
+                success:function(result){
+                    if (result.code == 200) {
+                        alert(JSON.stringify(result));
+                    } else {
+                        alert(result.msg);
+                    }
+                }});
+        });
+    </script>
+</body>
+</html>
