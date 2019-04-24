@@ -1,7 +1,7 @@
 package com.gitee.taven.filter;
 
 import com.gitee.taven.pojo.CurrentUser;
-import com.gitee.taven.pojo.UserDTO;
+import com.gitee.taven.pojo.UserBO;
 import com.gitee.taven.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBucket;
@@ -24,7 +24,7 @@ public abstract class KickOutFilter implements Filter {
     public RedissonClient redissonClient;
 
     @Autowired
-    private UserService userService;
+    public UserService userService;
 
     public static final String PREFIX = "uni_token_";
 
@@ -41,12 +41,13 @@ public abstract class KickOutFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        if (checkToken(request, response) && isAccessAllowed(request, response)) {
-            filterChain.doFilter(req, resp);
+        try {
+            if (checkToken(request, response) && isAccessAllowed(request, response)) {
+                filterChain.doFilter(req, resp);
 
-        } else {
-            return;
-
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -58,7 +59,7 @@ public abstract class KickOutFilter implements Filter {
      * @param response
      * @return
      */
-    public abstract boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response);
+    public abstract boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
     /**
      * 检查是否携带token 以及token是否失效
@@ -75,15 +76,15 @@ public abstract class KickOutFilter implements Filter {
         }
 
         // 校验token是否存在
-        RBucket<UserDTO> rBucket = redissonClient.getBucket(token);
-        UserDTO userDTO = rBucket.get();
+        RBucket<UserBO> rBucket = redissonClient.getBucket(token);
+        UserBO userBO = rBucket.get();
 
-        if (userDTO == null) {
-            sendJsonResponse(response, 403, "令牌过期");
+        if (userBO == null) {
+            sendJsonResponse(response, 403, "无效令牌");
             return false;
         }
 
-        CurrentUser.put(userDTO);
+        CurrentUser.put(userBO);
         return true;
     }
 

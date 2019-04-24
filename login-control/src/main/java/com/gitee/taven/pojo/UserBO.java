@@ -1,11 +1,13 @@
 package com.gitee.taven.pojo;
 
-public class UserDTO {
+public class UserBO {
     private String username;
 
     private String password;
 
     private String realName;
+
+    private boolean kickout;
 
     public String getUsername() {
         return username;
@@ -29,5 +31,13 @@ public class UserDTO {
 
     public void setRealName(String realName) {
         this.realName = realName == null ? null : realName.trim();
+    }
+
+    public boolean isKickout() {
+        return kickout;
+    }
+
+    public void setKickout(boolean kickout) {
+        this.kickout = kickout;
     }
 }

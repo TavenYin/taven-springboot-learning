@@ -1,12 +1,12 @@
 package com.gitee.taven.service;
 
-import com.gitee.taven.pojo.UserDTO;
+import com.gitee.taven.pojo.UserBO;
 
 public interface UserService {
 
-    UserDTO getUserByToken(String jwt);
+    UserBO getUserByToken(String jwt);
 
-    String buildUserInfo(UserDTO userDTO);
+    String buildUserInfo(UserBO userBO);
 
     void logout(String jwt);
 
