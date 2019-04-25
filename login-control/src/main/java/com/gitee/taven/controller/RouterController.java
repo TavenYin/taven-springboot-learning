@@ -15,4 +15,9 @@ public class RouterController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/")
+    public String _login() {
+        return "login";
+    }
 }

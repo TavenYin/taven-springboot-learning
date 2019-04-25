@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 先标记后踢出
+ * 队列踢出
  */
 public class QueueKickOutFilter extends KickOutFilter {
     /**
@@ -48,7 +48,7 @@ public class QueueKickOutFilter extends KickOutFilter {
         try {
             RDeque<String> deque = redissonClient.getDeque(userKey);
 
-            // 如果队列里没有此sessionId，且用户没有被踢出；放入队列
+            // 如果队列里没有此token，且用户没有被踢出；放入队列
             if (!deque.contains(token) && currentSession.isKickout() == false) {
                 deque.push(token);
             }

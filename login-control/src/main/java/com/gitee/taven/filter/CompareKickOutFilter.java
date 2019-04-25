@@ -7,6 +7,9 @@ import org.redisson.api.RBucket;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 比较时间戳
+ */
 public class CompareKickOutFilter extends KickOutFilter {
     @Override
     public boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) {
