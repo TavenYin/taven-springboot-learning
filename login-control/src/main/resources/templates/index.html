@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
@@ -8,7 +8,7 @@
     <button id="getInfo">GET INFO</button>
     <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
     <script>
-        $("#getInfo").click(function(){
+        function getinfo() {
             $.ajax({
 
                 url:"/user/info",
@@ -24,6 +24,14 @@
                         alert(result.msg);
                     }
                 }});
+        }
+
+        $("#getInfo").click(function(){
+            getinfo();
+        });
+
+        $(function() {
+            getinfo();
         });
     </script>
 </body>

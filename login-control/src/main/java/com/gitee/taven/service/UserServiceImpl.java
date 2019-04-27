@@ -17,12 +17,6 @@ public class UserServiceImpl implements UserService {
     private RedissonClient redissonClient;
 
     @Override
-    public UserBO getUserByToken(String jwt) {
-        RBucket<UserBO> rBucket = redissonClient.getBucket(jwt);
-        return rBucket.get();
-    }
-
-    @Override
     public String buildUserInfo(UserBO user) {
         String username = user.getUsername();
         String jwt = JWTUtil.sign(username, JWTUtil.SECRET);
