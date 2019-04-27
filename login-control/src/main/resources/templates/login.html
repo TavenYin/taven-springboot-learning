@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+</head>
+<body>
+    用户名:<input type="text" id="username"><br>
+    密码:<input type="password" id="password"><br>
+    <button id="login">登录</button>
+    <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $("#login").click(function(){
+            var inputData = {};
+            inputData.username = $("#username").val();
+            inputData.password = $("#password").val();
+
+            $.ajax({
+                method: "post",
+                url:"login",
+                contentType: "application/json",
+                data: JSON.stringify(inputData),
+                dataType: "json",
+                success:function(result){
+                    if (result.code == 200) {
+                        window.location.href = "index.html";
+                        localStorage.setItem("token", result.data);
+                    }
+                }});
+        });
+    </script>
+</body>
+</html>
