@@ -18,12 +18,14 @@ public class NewTask {
             boolean durable = true;
             channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
 
-            String message = String.join(" ", argv);
+//            String message = String.join(" ", argv);
+            String message = "{\"test\":\"测试中文json2\"}";
 
             channel.basicPublish("", TASK_QUEUE_NAME,
                 MessageProperties.PERSISTENT_TEXT_PLAIN,
                 message.getBytes("UTF-8"));
             System.out.println(" [x] Sent '" + message + "'");
+
         }
     }
 

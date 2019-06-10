@@ -5,8 +5,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-public class Worker {
-
+/**
+ * 发生异常时处理 TODO
+ */
+public class WorkWithException {
     private static final String TASK_QUEUE_NAME = "task_queue";
 
     public static void main(String[] argv) throws Exception {
@@ -27,25 +29,21 @@ public class Worker {
             System.out.println(" [x] Received '" + message + "'");
             try {
                 doWork(message);
-            } finally {
-                System.out.println(" [x] Done");
-                // 向mq发送ack (确认请求)，表示当前消息成功处理
-                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            } catch (Exception e) {
+                System.out.println(" catch Exception");
+                // todo 消息发生异常时如何处理
+                channel.basicReject(delivery.getEnvelope().getDeliveryTag(), true);
+                return;
             }
+            System.out.println(" [x] Done");
+            // 向mq发送ack (确认请求)，表示当前消息成功处理
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         };
         channel.basicConsume(TASK_QUEUE_NAME, false, deliverCallback, consumerTag -> { });
     }
 
     private static void doWork(String task) {
-        for (char ch : task.toCharArray()) {
-            if (ch == '.') {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException _ignored) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
+        throw new RuntimeException();
     }
-}
 
+}
