@@ -26,6 +26,8 @@ public class NewTask {
                 message.getBytes("UTF-8"));
             System.out.println(" [x] Sent '" + message + "'");
 
+            // 生产者能否得到消费者的反馈？// todo
+
         }
     }
 
