@@ -26,15 +26,20 @@ public class WorkWithException {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
 
-            System.out.println(" [x] Received '" + message + "'");
             try {
-                doWork(message);
-            } catch (Exception e) {
-                System.out.println(" catch Exception");
-                // todo 消息发生异常时如何处理
-                channel.basicReject(delivery.getEnvelope().getDeliveryTag(), true);
-                return;
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            System.out.println(" [x] Received '" + message + "'");
+//            try {
+                doWork(message);
+//            } catch (Exception e) {
+//                System.out.println(" catch Exception");
+//                // todo 消息发生异常时如何处理 可能应该将错误的消息记录一下，具体场景具体分析
+//                channel.basicReject(delivery.getEnvelope().getDeliveryTag(), true);
+//                return;
+//            }
             System.out.println(" [x] Done");
             // 向mq发送ack (确认请求)，表示当前消息成功处理
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -43,7 +48,11 @@ public class WorkWithException {
     }
 
     private static void doWork(String task) {
-        throw new RuntimeException();
+        // 据我观察，当消费者客户端抛出异常后，MQ会切断当前客户端，
+        // 因为消息并没有删除，MQ会将该消息转发给其他的消费者节点
+        // 抛出异常的客户端，不会再接收到数据
+//        throw new RuntimeException();
+        System.exit(0);
     }
 
 }
