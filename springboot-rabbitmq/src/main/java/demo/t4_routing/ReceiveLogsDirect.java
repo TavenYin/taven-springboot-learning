@@ -1,4 +1,4 @@
-package demo._4_routing;
+package demo.t4_routing;
 
 import com.rabbitmq.client.*;
 

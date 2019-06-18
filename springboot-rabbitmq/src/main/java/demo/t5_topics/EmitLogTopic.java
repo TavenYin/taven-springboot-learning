@@ -1,4 +1,4 @@
-package demo._5_topics;
+package demo.t5_topics;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

@@ -1,4 +1,4 @@
-package demo._2_workqueue;
+package demo.t2_workqueue;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

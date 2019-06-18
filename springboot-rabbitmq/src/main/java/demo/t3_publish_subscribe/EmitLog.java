@@ -1,4 +1,4 @@
-package demo._3_publish_subscribe;
+package demo.t3_publish_subscribe;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
