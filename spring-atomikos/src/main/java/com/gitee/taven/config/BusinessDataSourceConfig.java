@@ -18,10 +18,10 @@ import com.gitee.taven.utils.PojoUtil;
 public class BusinessDataSourceConfig {
 
 	static final String PACKAGE = "com.gitee.taven.mapper.business";
-	
+
 	@Autowired
 	private BusinessProperties businessProperties;
-	
+
 	@Bean(name = "businessDataSource")
     public DataSource businessDataSource() {
         AtomikosDataSourceBean ds = new AtomikosDataSourceBean();
@@ -29,14 +29,15 @@ public class BusinessDataSourceConfig {
         ds.setXaDataSourceClassName("com.alibaba.druid.pool.xa.DruidXADataSource");
         ds.setUniqueResourceName("businessProperties");
         ds.setPoolSize(5);
+		ds.setTestQuery("SELECT 1");
         return ds;
     }
-	
+
 	@Bean
 	public SqlSessionFactory businessSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(businessDataSource());
 		return sqlSessionFactoryBean.getObject();
 	}
-	
+
 }

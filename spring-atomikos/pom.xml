@@ -78,8 +78,16 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		
+
 		<resources>
+			<!--指定xml文件位置-->
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
@@ -87,7 +95,7 @@
 				</includes>
 			</resource>
 		</resources>
-		
+
 	</build>
 
 

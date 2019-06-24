@@ -1,0 +1,7 @@
+spring:
+  quartz:
+    jdbc:
+#      schema: classpath:schema/tables_mysql.sql
+      schema: classpath:schema/tables_mysql_inno.sql
+      initialize-schema: ALWAYS
+    job-store-type: JDBC

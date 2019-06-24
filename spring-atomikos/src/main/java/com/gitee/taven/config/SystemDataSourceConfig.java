@@ -20,7 +20,7 @@ import com.gitee.taven.utils.PojoUtil;
 public class SystemDataSourceConfig {
 
 	static final String PACKAGE = "com.gitee.taven.mapper.system";
-	
+
 	@Autowired
 	private SystemProperties systemProperties;
 
@@ -32,6 +32,7 @@ public class SystemDataSourceConfig {
 		ds.setXaDataSourceClassName("com.alibaba.druid.pool.xa.DruidXADataSource");
 		ds.setUniqueResourceName("systemDataSource");
 		ds.setPoolSize(5);
+		ds.setTestQuery("SELECT 1");
 		return ds;
 	}
 
@@ -42,5 +43,5 @@ public class SystemDataSourceConfig {
 		sqlSessionFactoryBean.setDataSource(systemDataSource());
 		return sqlSessionFactoryBean.getObject();
 	}
-	
+
 }
