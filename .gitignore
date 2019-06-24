@@ -40,3 +40,5 @@
 /repeat-submit-intercept/target
 /springboot-redisson/target
 /login-control/target
+/springboot-rabbitmq/target
+/springboot-quartz/target

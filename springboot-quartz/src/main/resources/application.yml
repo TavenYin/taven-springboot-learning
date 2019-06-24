@@ -1,0 +1,24 @@
+server:
+  port: 8887
+
+spring:
+  profiles:
+#    active: db
+    active: memory
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
+    username: root
+    password: root
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 15
+      minimum-idle: 5
+      pool-name: HikariCP
+
+
