@@ -42,3 +42,4 @@
 /login-control/target
 /springboot-rabbitmq/target
 /springboot-quartz/target
+/springboot-transaction/target
