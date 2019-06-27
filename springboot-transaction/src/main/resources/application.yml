@@ -27,3 +27,10 @@ spring:
         max-active: 8
         max-wait: -1ms
     timeout: 50000000ms
+
+cache:
+  default:
+    expire-time: 200
+  demo:
+    expire-time: 180
+    name: demoCache

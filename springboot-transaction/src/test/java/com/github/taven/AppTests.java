@@ -16,7 +16,16 @@ public class AppTests {
 	@Test
 	public void contextLoads() {
 //		demoService.insertDB(false);
-		demoService.insertRedis(true);
+//		demoService.insertRedis(true);
+		demoService.insertDBAndRedis(false);
+	}
+
+	@Test
+	public void testCache() {
+		String uuid = "123";
+		demoService.cache(uuid);
+//		demoService.removeCache(true, uuid);
+		demoService.removeCacheAfter(true, uuid);
 	}
 
 }
