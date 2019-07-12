@@ -43,3 +43,4 @@
 /springboot-rabbitmq/target
 /springboot-quartz/target
 /springboot-transaction/target
+/springboot-flyway/target
