@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Hello World!</title>
+</head>
+<body>
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+
+<button id="api_user">api_user</button>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    $("#api_user").click(function () {
+        $.ajax({
+            type : "get",
+            contentType: "application/json;charset=UTF-8",
+            url : "http://localhost:8080/api/user",
+            // data : JSON.stringify(list),
+            success : function(result) {
+                alert(result);
+            },
+            error : function(e){
+                alert(e.status);
+                alert(e.responseText);
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

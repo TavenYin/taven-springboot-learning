@@ -44,3 +44,5 @@
 /springboot-quartz/target
 /springboot-transaction/target
 /springboot-flyway/target
+/spring-security/out
+/spring-security/.gradle
