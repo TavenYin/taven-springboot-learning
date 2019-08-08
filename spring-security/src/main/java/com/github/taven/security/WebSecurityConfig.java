@@ -1,5 +1,6 @@
 package com.github.taven.security;
 
+import com.github.taven.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +20,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/", "/home").permitAll()
+                // 测试配置URL权限
+                .antMatchers("/match/**").hasAuthority("sys:match")
+                // 对某URL添加多个权限，可以多次配置
+                .antMatchers("/match/**").hasAuthority("sys:mm")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -26,7 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .logout()
-                .permitAll().and();
+                .permitAll()
+                .and()
+        ;
     }
 
     @Bean

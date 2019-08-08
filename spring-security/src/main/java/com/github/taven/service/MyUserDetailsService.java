@@ -1,9 +1,7 @@
-package com.github.taven.security;
+package com.github.taven.service;
 
-import com.github.taven.entity.RoleDO;
 import com.github.taven.entity.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,12 +9,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MyUserDetailsService implements UserDetailsService {
+    private static final String ROLE_PREFIX = "ROLE_";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -32,12 +27,15 @@ public class MyUserDetailsService implements UserDetailsService {
         if (user == null)
             throw new UsernameNotFoundException("用户不存在：" + username);
 
-        List<RoleDO> roleDOList = jdbcTemplate.query(Sql.selectRolesByUserId, Sql.newParams(user.getId()), new BeanPropertyRowMapper<>(RoleDO.class));
-
         return User.builder()
                 .username(username)
                 .password(user.getPassword())
-                .roles(roleDOList.stream().map(RoleDO::getRoleCode).collect(Collectors.joining()))
+                .authorities(
+                        ROLE_PREFIX +"super_admin",
+                        ROLE_PREFIX +"user",
+                        "sys:user:add", "sys:user:edit", "sys:user:del",
+                        "sys:match", "sys:mm"
+                )// 这里偷懒写死几个权限和角色
                 .build();
     }
 

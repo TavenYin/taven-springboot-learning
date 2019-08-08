@@ -10,25 +10,59 @@
     <input type="submit" value="Sign Out"/>
 </form>
 
+<h3>以下是权限测试</h3>
+
 <button id="api_user">api_user</button>
+<button id="api_super_admin">api_super_admin</button>
+<button id="user_admin">user_admin</button>
+
+<br>
+
+<button id="match_test">测试路径匹配</button>
+<button id="match_test_test">三级路径匹配</button>
+<button id="match_and">路径匹配加注解方式</button>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     $("#api_user").click(function () {
+        ajaxGet("http://localhost:8080/api/user");
+    });
+
+    $("#api_super_admin").click(function () {
+        ajaxGet("http://localhost:8080/api/super_admin");
+    });
+
+    $("#user_admin").click(function () {
+        ajaxGet("http://localhost:8080/api/user_admin");
+    });
+
+    $("#match_test").click(function () {
+        ajaxGet("http://localhost:8080/match/test");
+    });
+
+    $("#match_test_test").click(function () {
+        ajaxGet("http://localhost:8080/match/test/test");
+    });
+
+    $("#match_and").click(function () {
+        ajaxGet("http://localhost:8080/match/and");
+    });
+
+    function ajaxGet(url) {
         $.ajax({
-            type : "get",
+            type: "get",
             contentType: "application/json;charset=UTF-8",
-            url : "http://localhost:8080/api/user",
+            url: url,
             // data : JSON.stringify(list),
-            success : function(result) {
+            success: function (result) {
                 alert(result);
             },
-            error : function(e){
+            error: function (e) {
                 alert(e.status);
                 alert(e.responseText);
             }
         });
-    })
+    }
 </script>
 
 </body>

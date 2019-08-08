@@ -1,6 +1,5 @@
-package com.github.taven.security
+package com.github.taven.service
 
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.lang.Nullable
 import org.springframework.util.CollectionUtils
@@ -10,7 +9,7 @@ class Sql {
         return objects
     }
 
-    public static <T> T singleResult(@Nullable Collection<T> results) throws IncorrectResultSizeDataAccessException {
+    static <T> T singleResult(@Nullable Collection<T> results) throws IncorrectResultSizeDataAccessException {
         if (CollectionUtils.isEmpty(results)) {
             return null
         }
