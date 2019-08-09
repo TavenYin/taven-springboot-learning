@@ -22,6 +22,22 @@
 <button id="match_test_test">三级路径匹配</button>
 <button id="match_and">路径匹配加注解方式</button>
 
+<div sec:authorize="hasRole('super_admin')">
+    super_admin 可见
+</div>
+
+<div sec:authorize="hasAuthority('sys:mm')">
+    sys:mm 可见
+</div>
+
+<div sec:authorize="hasAuthority('sys:mmmmmmmmmmm')">
+    你看不见
+</div>
+
+<div sec:authorize="hasRole('xxx')">
+    你看不见
+</div>
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     $("#api_user").click(function () {
