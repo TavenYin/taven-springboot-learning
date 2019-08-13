@@ -19,7 +19,7 @@ public class NewTask {
             channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
 
 //            String message = String.join(" ", argv);
-            String message = "{\"test\":\"测试中文json2\"}";
+            String message = "{\"test\":\"测试中文json233\"}";
 
             channel.basicPublish("", TASK_QUEUE_NAME,
                 MessageProperties.PERSISTENT_TEXT_PLAIN,

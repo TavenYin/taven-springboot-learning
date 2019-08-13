@@ -1,9 +1,6 @@
 package demo.t2_workqueue;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.*;
 
 /**
  * 发生异常时处理 TODO
@@ -13,7 +10,7 @@ public class WorkWithException {
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+//        factory.setUri("amqp://admin:123456@127.0.0.1:5672");
         final Connection connection = factory.newConnection();
         final Channel channel = connection.createChannel();
 
@@ -21,7 +18,7 @@ public class WorkWithException {
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         // accept only one unack-ed message at a time
-        channel.basicQos(1);
+        channel.basicQos(2);
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
@@ -51,8 +48,7 @@ public class WorkWithException {
         // 据我观察，当消费者客户端抛出异常后，MQ会切断当前客户端，
         // 因为消息并没有删除，MQ会将该消息转发给其他的消费者节点
         // 抛出异常的客户端，不会再接收到数据
-//        throw new RuntimeException();
-        System.exit(0);
+        throw new RuntimeException();
     }
 
 }
