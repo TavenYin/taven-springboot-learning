@@ -155,3 +155,5 @@ CREATE TABLE `sys_user_role_ref`  (
 -- Records of sys_user_role_ref
 -- ----------------------------
 INSERT INTO `sys_user_role_ref` VALUES ('1', '1', '000000', '0', NULL, NULL, '2018-12-16 14:31:15', NULL);
+
+SET FOREIGN_KEY_CHECKS = 1;
