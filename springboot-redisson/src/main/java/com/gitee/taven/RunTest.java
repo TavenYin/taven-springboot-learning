@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-@Component
+//@Component
 public class RunTest implements ApplicationRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(RunTest.class);
 
