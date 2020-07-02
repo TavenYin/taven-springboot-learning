@@ -46,3 +46,4 @@
 /springboot-flyway/target
 /spring-security/out
 /spring-security/.gradle
+/sp-websocket/target
