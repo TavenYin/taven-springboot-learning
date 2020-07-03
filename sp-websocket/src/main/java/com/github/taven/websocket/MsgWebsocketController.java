@@ -12,7 +12,7 @@ public class MsgWebsocketController {
 
     @OnOpen
     public void onOpen(Session session) {
-        WsSessionManager.saveSession(session);
+        WebSocketSupport.storageSession(session);
         System.out.println("session open. ID:" + session.getId());
     }
 
@@ -38,8 +38,6 @@ public class MsgWebsocketController {
     @OnError
     public void onError(Session session, Throwable error) {
         // 啥时候走这个?
-        System.out.println("发生错误》》发生时间：" + System.currentTimeMillis() + "  ID是：" + session.getId());
-
         error.printStackTrace();
     }
 

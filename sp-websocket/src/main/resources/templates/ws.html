@@ -14,12 +14,14 @@ Welcome<br/>
 </body>
 
 <script type="text/javascript">
+    var userId = [[${userId}]];
+
     var websocket = null;
     var host = "";
     if (window.location.protocol == 'http:') {
-        host = 'ws://localhost:8080/message_websocket';
+        host = 'ws://localhost:8080/message_websocket?userId='+userId;
     } else {
-        host = 'wss://localhost:8080/message_websocket';
+        host = 'wss://localhost:8080/message_websocket?userId='+userId;
     }
     //判断当前浏览器是否支持WebSocket
 
@@ -29,7 +31,6 @@ Welcome<br/>
         websocket = new MozWebSocket(host);
     } else {
         alert("该浏览器不支持WebSocket！");
-//        return;
     }
 
     //连接发生错误的回调方法

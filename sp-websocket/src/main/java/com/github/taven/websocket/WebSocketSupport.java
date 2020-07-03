@@ -1,33 +1,93 @@
 package com.github.taven.websocket;
 
-import org.springframework.stereotype.Component;
+import com.github.taven.sender.MsgDTO;
+import org.springframework.util.StringUtils;
 
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+import com.github.taven.websocket.util.*;
+
 public class WebSocketSupport {
 
-    public void send(String sessionId, String message) {
-        Session session = WsSessionManager.getSession(sessionId);
+    private static final WsSessionManager sessionManager = new WsSessionManager();
 
-        if (session != null) {
-            this.send(session, message);
+    private WebSocketSupport() {}
 
-        } else {
-            // 无法发送的情况 TODO
+    /**
+     * 尝试向客户端推送消息
+     *
+     * @param msgDTO
+     */
+    public static void tryPush(MsgDTO msgDTO) {
+        if (msgDTO == null)
+            return;
 
+        String userId = String.valueOf(msgDTO.getReceiverId());
+        Session session = sessionManager.get(userId);
+
+        if (session != null && session.isOpen()) {
+            push(session, msgDTO.getMsgBody());
         }
-
 
     }
 
-    public void send(Session session, String message) {
+    public static void push(Session session, String message) {
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public static void storageSession(Session session) {
+        sessionManager.save(session);
+    }
+
+    public static Session getSession(String id) {
+        return sessionManager.get(id);
+    }
+
+    public static void releaseSession(String id) {
+        sessionManager.releaseSession(id);
+    }
+
+    private static class WsSessionManager {
+
+        final ConcurrentHashMap<String, Session> sessionPool = new ConcurrentHashMap<>();
+
+        void save(Session session) {
+            String querystring = session.getQueryString();
+
+            if (!StringUtils.isEmpty(querystring)) {
+                Map<String, String> param = QueryStringUtil.parse(querystring);
+                String key = param.get("userId");
+                sessionPool.put(key, session);
+
+            }
+        }
+
+        Session get(String key) {
+            return sessionPool.get(key);
+        }
+
+        boolean haveSession(String key) {
+            return sessionPool.containsKey(key);
+        }
+
+        void releaseSession(String key) {
+            Session session = sessionPool.remove(key);
+            try {
+                if (session.isOpen())
+                    session.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
 }
