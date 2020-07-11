@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 
 @ServerEndpoint(value = "/message_websocket")
 @Controller
@@ -12,6 +11,7 @@ public class MsgWebsocketController {
 
     @OnOpen
     public void onOpen(Session session) {
+        // 先鉴权，如果鉴权通过则存储WebsocketSession，否则关闭连接，这里省略了鉴权的代码
         WebSocketSupport.storageSession(session);
         System.out.println("session open. ID:" + session.getId());
     }
@@ -28,7 +28,7 @@ public class MsgWebsocketController {
      * 收到客户端消息后调用的方法
      */
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message, Session session) {
         System.out.println("get client msg. ID:" + session.getId() + ". msg:" + message);
     }
 
@@ -37,7 +37,6 @@ public class MsgWebsocketController {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        // 啥时候走这个?
         error.printStackTrace();
     }
 

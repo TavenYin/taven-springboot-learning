@@ -43,7 +43,14 @@ public class WebSocketSupport {
     }
 
     public static void storageSession(Session session) {
-        sessionManager.save(session);
+        String querystring = session.getQueryString();
+
+        if (!StringUtils.isEmpty(querystring)) {
+            Map<String, String> param = QueryStringUtil.parse(querystring);
+            String key = param.get("userId");
+
+            sessionManager.save(key ,session);
+        }
     }
 
     public static Session getSession(String id) {
@@ -56,17 +63,11 @@ public class WebSocketSupport {
 
     private static class WsSessionManager {
 
-        final ConcurrentHashMap<String, Session> sessionPool = new ConcurrentHashMap<>();
+        final ConcurrentHashMap<Object, Session> sessionPool = new ConcurrentHashMap<>();
 
-        void save(Session session) {
-            String querystring = session.getQueryString();
+        void save(Object key, Session session) {
 
-            if (!StringUtils.isEmpty(querystring)) {
-                Map<String, String> param = QueryStringUtil.parse(querystring);
-                String key = param.get("userId");
-                sessionPool.put(key, session);
-
-            }
+            sessionPool.put(key, session);
         }
 
         Session get(String key) {
