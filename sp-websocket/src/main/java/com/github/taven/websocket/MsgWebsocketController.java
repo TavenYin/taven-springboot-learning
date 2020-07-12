@@ -13,6 +13,7 @@ public class MsgWebsocketController {
     public void onOpen(Session session) {
         // 先鉴权，如果鉴权通过则存储WebsocketSession，否则关闭连接，这里省略了鉴权的代码
         WebSocketSupport.storageSession(session);
+        // session.setMaxIdleTimeout(60000); // 可以设置session最大空闲时间
         System.out.println("session open. ID:" + session.getId());
     }
 
@@ -21,6 +22,7 @@ public class MsgWebsocketController {
      */
     @OnClose
     public void onClose(Session session) {
+        WebSocketSupport.releaseSession(session);
         System.out.println("session close. ID:" + session.getId());
     }
 

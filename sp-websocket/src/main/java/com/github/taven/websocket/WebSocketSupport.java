@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,6 +60,17 @@ public class WebSocketSupport {
 
     public static void releaseSession(String id) {
         sessionManager.releaseSession(id);
+    }
+
+    public static void releaseSession(Session session) {
+        String querystring = session.getQueryString();
+
+        if (!StringUtils.isEmpty(querystring)) {
+            Map<String, String> param = QueryStringUtil.parse(querystring);
+            String key = param.get("userId");
+
+            sessionManager.releaseSession(key);
+        }
     }
 
     private static class WsSessionManager {
