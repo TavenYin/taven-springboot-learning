@@ -47,3 +47,6 @@
 /spring-security/out
 /spring-security/.gradle
 /sp-websocket/target
+/springboot-dubbo/dubbo-consumer/target
+/springboot-dubbo/dubbo-provider/target
+/springboot-dubbo/dubbo-provider2/target
