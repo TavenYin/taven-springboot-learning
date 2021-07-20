@@ -60,8 +60,6 @@ public class NioServlet extends HttpServlet {
                     // 业务代码 ...
                     TimeUnit.SECONDS.sleep(1);
 
-                    resp.setContentType("text/json;charset=UTF-8");
-                    resp.setCharacterEncoding("UTF-8");
                     resp.getOutputStream().setWriteListener(new NioWriteListener(asyncContext, resp));
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
@@ -86,6 +84,8 @@ public class NioServlet extends HttpServlet {
 
         @Override
         public void onWritePossible() throws IOException {
+            resp.setContentType("text/json;charset=UTF-8");
+            resp.setCharacterEncoding("UTF-8");
             resp.getOutputStream().print(JSONObject.toJSONString(Map.of("name", "NioServlet")));
             resp.getOutputStream().flush();
             asyncContext.complete();
