@@ -13,8 +13,7 @@ public class ServletUtil {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.println(JSONObject.toJSON(object));
-//        out.flush();
-//        out.close();
+        out.flush();
     }
 
 }
