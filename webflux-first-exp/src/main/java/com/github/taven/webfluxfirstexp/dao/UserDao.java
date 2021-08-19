@@ -1,6 +1,7 @@
 package com.github.taven.webfluxfirstexp.dao;
 
 import com.github.taven.webfluxfirstexp.model.UserDO;
+import com.github.taven.webfluxfirstexp.utils.SpringReactiveUtils;
 import io.r2dbc.spi.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -33,7 +34,9 @@ public class UserDao {
                                     return userDO;
                                 }
                         )
-                ).last();
+                ).last()
+                .publishOn(SpringReactiveUtils.reactorHttpNioScheduler())
+                ;
 
         // TODO
         // 1. 多次查询如何组合处理逻辑？

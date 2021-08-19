@@ -1,5 +1,6 @@
 package com.github.taven.webfluxfirstexp.web;
 
+import com.github.taven.webfluxfirstexp.utils.SpringReactiveUtils;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -14,9 +15,6 @@ import reactor.netty.http.HttpResources;
 
 @Controller
 public class BlockingController {
-    private final static Scheduler REACTOR_HTTP_NIO_SCHEDULER =
-            Schedulers.fromExecutor(HttpResources.get().onServer(true));
-
     public Mono<ServerResponse> block(ServerRequest request) {
         Mono<String> hello = Mono.defer(() -> {
             System.out.println("defer " + Thread.currentThread().getName());
@@ -27,7 +25,7 @@ public class BlockingController {
                     return t;
                 })
                 .subscribeOn(Schedulers.boundedElastic())
-                .publishOn(REACTOR_HTTP_NIO_SCHEDULER)
+                .publishOn(SpringReactiveUtils.reactorHttpNioScheduler())
                 .map(t -> {
                     System.out.println("map2 " + Thread.currentThread().getName());
                     return t;
