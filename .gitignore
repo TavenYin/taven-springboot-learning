@@ -53,3 +53,4 @@
 /servlet-3.1-demo/target
 /webflux-first-exp/target
 /springboot-sse/target
+/springboot-restTemplate/target
