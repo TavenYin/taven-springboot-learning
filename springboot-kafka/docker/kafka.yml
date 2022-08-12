@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  zookeeper:
+    image: zookeeper:3.5.5
+    restart: always
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    expose:
+      - "2181"
+    environment:
+      - ZOO_MY_ID=1
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.1
+    restart: always
+    container_name: kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.23.91:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_MESSAGE_MAX_BYTES=2000000
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+  kafka-manager:
+    image: sheepkiller/kafka-manager                ## 开源的web管理kafka集群的界面
+    environment:
+      ZK_HOSTS: zookeeper:2181
+    ports:
+      - "9001:9000"
