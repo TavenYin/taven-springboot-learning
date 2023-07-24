@@ -8,11 +8,34 @@ dataSources:
 
 # 分片参考文档 https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/sharding/
 rules:
-  - !SHARDING
-    tables:
-      t_order:
-        actualDataNodes: ds_1.t_order_${0..1}
-        tableStrategy:
-          standard:
-            shardingColumn: order_id
-            shardingAlgorithmName: shardingMod
+- !SHARDING
+  tables:
+    t_order:
+      actualDataNodes: ds_1.t_order_${0..1}
+      tableStrategy:
+        standard:
+          shardingColumn: order_id
+          shardingAlgorithmName: test-mod
+      keyGenerateStrategy:
+        column: order_id
+        keyGeneratorName: snowflake
+      # 这个有啥用？
+      auditStrategy:
+        auditorNames:
+          - sharding_key_required_auditor
+        allowHintDisable: true
+  shardingAlgorithms:
+    test-mod:
+#      type: INLINE
+      type: MOD
+      props:
+        algorithm-expression: ds_1${order_id % 2}
+        sharding-count: 2
+  keyGenerators:
+    snowflake:
+      type: SNOWFLAKE
+  auditors:
+    sharding_key_required_auditor:
+      type: DML_SHARDING_CONDITIONS
+props:
+  sql-show: true
