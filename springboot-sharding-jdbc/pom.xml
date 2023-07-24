@@ -43,16 +43,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.shardingsphere</groupId>
-			<artifactId>shardingsphere-jdbc-core</artifactId>
-			<version>${shardingsphere.version}</version>
-		</dependency>
-		<!-- 参考 https://github.com/apache/shardingsphere/issues/21646 -->
+<!--		<dependency>-->
+<!--			<groupId>org.apache.shardingsphere</groupId>-->
+<!--			<artifactId>shardingsphere-jdbc-core</artifactId>-->
+<!--			<version>${shardingsphere.version}</version>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; 参考 https://github.com/apache/shardingsphere/issues/21646 &ndash;&gt;-->
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 			<version>1.33</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shardingsphere</groupId>
+			<artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+			<version>5.2.1</version>
 		</dependency>
 	</dependencies>
 

@@ -14,8 +14,9 @@ public class ShardingService {
 //        this.jdbcTemplate = jdbcTemplate;
 //    }
 
-    public void insertOrder(Long userId) {
-
+    public void insertOrder(Long orderId, Long userId) {
+        String sql = "insert into t_order(order_id, user_id, create_time) values(?,?,now())";
+        jdbcTemplate.update(sql, orderId, userId);
     }
 
 }

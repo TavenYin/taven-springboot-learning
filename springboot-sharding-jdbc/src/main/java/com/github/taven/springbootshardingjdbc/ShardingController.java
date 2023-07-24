@@ -15,8 +15,8 @@ public class ShardingController {
     }
 
     @GetMapping("insertOrder")
-    public String insertOrder(Long userId) {
-        shardingService.insertOrder(userId);
+    public String insertOrder(Long orderId, Long userId) {
+        shardingService.insertOrder(orderId, userId);
         return "OK";
     }
 
