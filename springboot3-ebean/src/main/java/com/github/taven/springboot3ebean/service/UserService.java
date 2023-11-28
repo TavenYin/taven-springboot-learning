@@ -24,6 +24,15 @@ public class UserService {
         return database.find(User.class)
                 .where()
                 .eq("username", username)
+                .setMaxRows(1) // limit 1
+                .findOne();
+    }
+
+    public User finderOne(String username) {
+        // 简单阅读源码后，会发现使用 Finder 和 database.find(type) 是一样的
+        return User.userFinder.query()
+                .where()
+                .eq("username", username)
                 .findOne();
     }
 

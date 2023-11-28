@@ -20,6 +20,11 @@ public class TestApi {
         return userService.findOne(username);
     }
 
+    @GetMapping("findOneUser2")
+    public Object findOneUser2(String username) {
+        return userService.finderOne(username);
+    }
+
     @GetMapping("findAllUser")
     public Object findAllUser(String username) {
         return userService.findAll(username);

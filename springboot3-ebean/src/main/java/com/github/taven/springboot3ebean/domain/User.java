@@ -3,9 +3,7 @@ package com.github.taven.springboot3ebean.domain;
 import com.github.taven.springboot3ebean.domain.finder.UserFinder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -19,4 +17,10 @@ public class User {
 
     String username;
 
+    @Enumerated(EnumType.STRING)
+    UserStatus status;
+
+    Boolean isDeleted;
+
+    Long createTime;
 }
