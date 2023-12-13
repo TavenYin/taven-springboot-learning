@@ -35,7 +35,12 @@ public class WebfluxApplication {
 			return () -> {
 				// set 到新线程的 threadLocal
 				contextThreadLocal.set(value);
-				delegate.run();
+				try {
+					delegate.run();
+				} finally {
+					contextThreadLocal.remove();
+					log.info("remove value");
+				}
 			};
 		};
 	}
@@ -48,7 +53,11 @@ public class WebfluxApplication {
 								 WebFilterChain webFilterChain) {
 			contextThreadLocal.set("hello world");
 			log.info("set value");
-			return webFilterChain.filter(serverWebExchange);
+			return webFilterChain.filter(serverWebExchange)
+					.doFinally(signalType -> {
+						contextThreadLocal.remove();
+						log.info("remove value");
+					});
 		}
 	}
 
