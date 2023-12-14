@@ -39,7 +39,7 @@ public class WebfluxApplication {
 					delegate.run();
 				} finally {
 					contextThreadLocal.remove();
-					log.info("remove value");
+					log.info("remove copy value");
 				}
 			};
 		};
