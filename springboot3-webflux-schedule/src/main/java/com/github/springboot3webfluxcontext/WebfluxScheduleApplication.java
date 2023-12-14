@@ -1,7 +1,6 @@
 package com.github.springboot3webfluxcontext;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
@@ -25,9 +24,8 @@ public class WebfluxScheduleApplication {
     @Component
     public static class LogFilter implements WebFilter {
 
-        @NotNull
         @Override
-        public Mono<Void> filter(@NotNull ServerWebExchange serverWebExchange,
+        public Mono<Void> filter(ServerWebExchange serverWebExchange,
                                  WebFilterChain webFilterChain) {
             log.info("filter start");
             return webFilterChain.filter(serverWebExchange)
