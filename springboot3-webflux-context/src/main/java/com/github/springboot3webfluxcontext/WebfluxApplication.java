@@ -14,6 +14,9 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.function.Function;
 
+/**
+ * 基于 webflux 的 ThreadLocal 复制方案
+ */
 @Slf4j
 @RestController
 @SpringBootApplication
@@ -74,7 +77,8 @@ public class WebfluxApplication {
 		return Mono.fromCallable(() -> {
 			log.info("contextThreadLocal: {}", contextThreadLocal.get());
 			return contextThreadLocal.get();
-		}).subscribeOn(Schedulers.boundedElastic());
+		}).subscribeOn(Schedulers.boundedElastic())
+				.doOnNext(t -> log.info("contextThreadLocal: {}", contextThreadLocal.get()));
 	}
 
 	@GetMapping("publishOn")
@@ -84,10 +88,7 @@ public class WebfluxApplication {
 			return contextThreadLocal.get();
 		}).subscribeOn(Schedulers.boundedElastic())
 				.publishOn(Schedulers.parallel())
-				.map(v -> {
-					log.info("contextThreadLocal: {}", contextThreadLocal.get());
-					return v;
-				});
+				.doOnNext(t -> log.info("contextThreadLocal: {}", contextThreadLocal.get()));
 	}
 
 }
