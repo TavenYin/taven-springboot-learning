@@ -43,6 +43,10 @@ public class WebfluxScheduleApplication {
         return Mono.fromCallable(() -> {
                     String result = "hello world";
                     log.info("{}", result);
+                    byte[] data = new byte[1024 * 1024];
+                    // 填充数据
+                    // ...
+//                    return data;
                     return result;
                 }).subscribeOn(Schedulers.boundedElastic())
                 .doOnNext(result -> log.info("doOnNext: {}", result));

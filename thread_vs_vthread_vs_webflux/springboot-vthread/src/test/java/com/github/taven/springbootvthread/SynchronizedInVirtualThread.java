@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-public class SynchronizedInVThread {
+public class SynchronizedInVirtualThread {
 
     public static class SyncClass {
         ReentrantLock lock = new ReentrantLock();
