@@ -81,15 +81,14 @@ public class SpringbootVThreadApplication {
 		//
 		// 平台线程（默认200 IO 线程）：
 		// summary =   3000 in 00:00:08 =  376.5/s Avg:  1790 Min:   502 Max:  2796 Err:     0 (0.00%)
-		//
 		@GetMapping("/selectSleep")
 		public String selectSleep() {
-			String sql = "select SLEEP(0.5)";
+			String sql = "select SLEEP(0.1)";
 			return jdbcTemplate.queryForObject(sql, String.class);
 		}
 
 
-		// 结果：虚拟线程胜利，记住一定要把并发数调大
+		// sleep 500ms，并发1000 循环3次
 		// 虚拟线程：
 		// summary =   3000 in 00:00:04 =  847.0/s Avg:   514 Min:   500 Max:   618 Err:     0 (0.00%)
 		// 平台线程（默认200 IO 线程）：
@@ -97,10 +96,12 @@ public class SpringbootVThreadApplication {
 		// 和上面 selectSleep 的结果几乎一致
 		//
 		// 我们再来测试一下，降低 sleep 时间的结论
-		//
+		// sleep 100ms，并发1000 循环3次
+		// 虚拟线程和平台线程 QPS 都在 1300 左右
 		@GetMapping("/threadSleep")
 		public void sleepTest() throws InterruptedException {
-			Thread.sleep(500);
+//			Thread.sleep(500);
+			Thread.sleep(100);
 		}
 
 		@GetMapping("/cpuTest")
