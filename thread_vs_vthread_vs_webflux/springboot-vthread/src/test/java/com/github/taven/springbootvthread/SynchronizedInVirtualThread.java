@@ -56,12 +56,12 @@ public class SynchronizedInVirtualThread {
     public static void main(String[] args) {
         ThreadFactory tf = Thread.ofVirtual().factory();
         SyncClass syncClass = new SyncClass();
-        // 虚拟线程能使用的线程数=CPU核心数
-        // 这里的循环次数需要跑满所有的线程
+        // 虚拟线程能使用的平台线程数=CPU核心数
+        // 这里的循环次数需要跑满所有的平台线程
         for (int i=0; i<20; i++) {
             // 分别注释掉这两行，查看运行结果
-//            Thread thread = tf.newThread(syncClass::syncMethod);
-            Thread thread = tf.newThread(syncClass::lockMethod);
+            Thread thread = tf.newThread(syncClass::syncMethod);
+//            Thread thread = tf.newThread(syncClass::lockMethod);
             thread.start();
         }
 
@@ -72,7 +72,7 @@ public class SynchronizedInVirtualThread {
             log.error(e.getMessage(), e);
         }
 
-        // 验证虚拟线程对应的真实线程没有被 block
+        // 验证虚拟线程对应的平台线程没有被 block
         for (int i=0; i<20; i++) {
             Thread thread = tf.newThread(syncClass::normalMethod);
             thread.start();
