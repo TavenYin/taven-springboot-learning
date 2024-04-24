@@ -23,28 +23,48 @@ public class Springboot3WebfluxR2dbcApplication {
 		@Autowired
 		private DatabaseClient databaseClient;
 
-		// 并发1000 循环3次
-		// summary =   3000 in 00:00:02 = 1362.4/s Avg:   110 Min:     3 Max:  1603 Err:     0 (0.00%)
+		@GetMapping("test")
+		public Mono<String> test() {
+			return Mono.delay(Duration.ofMillis(100))
+					.thenReturn("Delayed response after 500 mills");
+		}
+
 		@GetMapping("/select1")
 		public Mono<String> select1Test() {
 			String sql = "select 1";
-			return databaseClient.sql(sql).map(row -> row.get(0, String.class)).one();
+			return databaseClient.sql(sql).map(row -> row.get(0, String.class)).first();
 		}
 
-		// 并发1000 循环3次
-		// summary =   3000 in 00:00:04 =  847.0/s Avg:   545 Min:   502 Max:  1091 Err:     0 (0.00%)
-		@GetMapping("/selectSleep")
-		public Mono<String> selectSleep() {
+
+		@GetMapping("/selectSleep500")
+		public Mono<String> selectSleep500() {
 			String sql = "select SLEEP(0.5)";
-			return databaseClient.sql(sql).map(row -> row.get(0, String.class)).one();
+			return databaseClient.sql(sql).map(row -> row.get(0, String.class)).first();
 		}
 
-		// 并发1000 循环3次
-		// summary =   3000 in 00:00:04 =  845.3/s Avg:   515 Min:   501 Max:   592 Err:     0 (0.00%)
-		@GetMapping("/threadSleep")
-		public Mono<String> sleepTest() {
-			return Mono.delay(Duration.ofMillis(500))
-					.thenReturn("Delayed response after 3 seconds");
+		@GetMapping("/selectSleep100")
+		public Mono<String> selectSleep100() {
+			String sql = "select SLEEP(0.1)";
+			return databaseClient.sql(sql).map(row -> row.get(0, String.class)).first();
+		}
+
+		@GetMapping("/cpuTest")
+		public Mono<Double> cpuTest() {
+			int iterations = 1000000;
+			double pi = calculatePi(iterations);
+			return Mono.just(pi);
+		}
+
+		private double calculatePi(int iterations) {
+			double pi = 0.0;
+			double iterator = 1.0;
+
+			for (int i = 0; i < iterations * 2; i += 2) {
+				pi += (4.0 / iterator) - (4.0 / (iterator + 2));
+				iterator += 4;
+			}
+
+			return pi;
 		}
 
 	}
